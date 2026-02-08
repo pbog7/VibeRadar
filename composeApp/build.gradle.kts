@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinCocoapods)
+    alias(libs.plugins.buildKonfig)
 }
 
 kotlin {
@@ -55,8 +56,10 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
+            implementation(libs.material3Adaptive)
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
@@ -64,7 +67,12 @@ kotlin {
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
-            implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.bundles.koin)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
+            implementation(project(":domain"))
+            implementation(project(":data"))
+            implementation(project(":core"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -75,7 +83,9 @@ kotlin {
 android {
     namespace = "com.pbogdev.viberadar"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-
+    androidResources {
+        noCompress += "tflite"
+    }
     defaultConfig {
         applicationId = "com.pbogdev.viberadar"
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -101,5 +111,27 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+}
+val buildFlavor: String = project.findProperty("buildFlavor")?.toString() ?: "dev"
+
+buildkonfig {
+    packageName = "com.pbogdev.viberadar"
+
+    // Required base config
+    defaultConfigs {
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "FLAVOR", buildFlavor)
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "BASE_URL", "https://jsonplaceholder.typicode.com/")
+    }
+
+
+    // Dev config override
+    defaultConfigs("dev") {
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "BASE_URL", "https://jsonplaceholder.typicode.com/")
+    }
+
+    // Prod config override
+    defaultConfigs("prod") {
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "BASE_URL", "https://jsonplaceholder.typicode.com/")
+    }
 }
 
