@@ -10,3 +10,6 @@ plugins {
     alias(libs.plugins.androidKotlinMultiplatformLibrary) apply false
     alias(libs.plugins.androidLint) apply false
 }
+repositories {
+    mavenCentral()
+}

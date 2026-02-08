@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
+    alias(libs.plugins.buildKonfig)
+    alias(libs.plugins.kotlinSerializationPlugin)
 }
 
 kotlin {
@@ -11,8 +13,8 @@ kotlin {
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
         namespace = "com.pbogdev.data"
-        compileSdk = 36
-        minSdk = 31
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
 
         withHostTestBuilder {
         }
@@ -61,6 +63,11 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(project(":domain"))
+                implementation(libs.bundles.koin)
+                implementation(libs.kotlin.stdlib)
+                implementation(libs.bundles.ktor)
+                implementation(libs.bundles.kotlinXSerialization)
+                implementation(libs.kermitLogger)
                 // Add KMP dependencies here
             }
         }
@@ -73,6 +80,7 @@ kotlin {
 
         androidMain {
             dependencies {
+                implementation(libs.ktor.client.okhttp)
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
@@ -89,6 +97,7 @@ kotlin {
 
         iosMain {
             dependencies {
+                implementation(libs.ktor.client.darwin)
                 // Add iOS-specific dependencies here. This a source set created by Kotlin Gradle
                 // Plugin (KGP) that each specific iOS target (e.g., iosX64) depends on as
                 // part of KMP’s default source set hierarchy. Note that this source set depends
@@ -97,5 +106,26 @@ kotlin {
             }
         }
     }
+}
+val buildFlavor: String = project.findProperty("buildFlavor")?.toString() ?: "dev"
 
+buildkonfig {
+    packageName = "com.pbogdev.viberadar"
+
+    // Required base config
+    defaultConfigs {
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "FLAVOR", buildFlavor)
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "BASE_URL", "https://jsonplaceholder.typicode.com/")
+    }
+
+
+    // Dev config override
+    defaultConfigs("dev") {
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "BASE_URL", "https://jsonplaceholder.typicode.com/")
+    }
+
+    // Prod config override
+    defaultConfigs("prod") {
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "BASE_URL", "https://jsonplaceholder.typicode.com/")
+    }
 }
