@@ -14,6 +14,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.pbogdev.core.appLogger
+import com.pbogdev.data.network.ApiServiceImpl
+import com.pbogdev.data.repository.ExampleRepositoryImpl
+import com.pbogdev.domain.models.CustomResult
+import com.pbogdev.domain.usecase.GetExamplesUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 import viberadar.composeapp.generated.resources.Res
@@ -24,6 +33,22 @@ import viberadar.composeapp.generated.resources.compose_multiplatform
 fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+        GetExamplesUseCase(ExampleRepositoryImpl(ApiServiceImpl()))
+
+        val coroutineScope = CoroutineScope(Dispatchers.IO)
+        coroutineScope.launch {
+            when (val result =
+                GetExamplesUseCase(ExampleRepositoryImpl(ApiServiceImpl())).invoke()) {
+                is CustomResult.Failure -> appLogger.i { "Get Examples UseCase failed" }
+                is CustomResult.Success -> {
+                    appLogger.i {
+                        "Get Examples UseCas success ${
+                            result.data.first()
+                        }"
+                    }
+                }
+            }
+        }
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.primaryContainer)

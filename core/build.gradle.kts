@@ -60,6 +60,18 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+                implementation(libs.material3Adaptive)
+                implementation(libs.androidx.lifecycle.viewmodelCompose)
+                implementation(libs.bundles.koin)
+                implementation(libs.kermitLogger)
+                implementation(libs.material3Adaptive)
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.uiToolingPreview)
+                implementation(project(":domain"))
                 // Add KMP dependencies here
             }
         }
