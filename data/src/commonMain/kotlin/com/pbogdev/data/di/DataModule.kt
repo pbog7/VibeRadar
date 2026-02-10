@@ -5,7 +5,7 @@ import com.pbogdev.data.network.ApiServiceImpl
 import com.pbogdev.data.network.httpLogger
 import com.pbogdev.data.repository.ExampleRepositoryImpl
 import com.pbogdev.domain.repository.ExampleRepository
-import com.pbogdev.viberadar.BuildKonfig
+import com.pbogdev.viberadar.data.BuildKonfig
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
