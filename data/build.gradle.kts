@@ -110,7 +110,7 @@ kotlin {
 val buildFlavor: String = project.findProperty("buildFlavor")?.toString() ?: "dev"
 
 buildkonfig {
-    packageName = "com.pbogdev.viberadar"
+    packageName = "com.pbogdev.viberadar.data"
 
     // Required base config
     defaultConfigs {

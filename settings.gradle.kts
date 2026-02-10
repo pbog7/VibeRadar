@@ -32,3 +32,5 @@ include(":composeApp")
 include(":core")
 include(":domain")
 include(":data")
+include(":androidApp")
+
