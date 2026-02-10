@@ -33,4 +33,4 @@ include(":core")
 include(":domain")
 include(":data")
 include(":androidApp")
-
+include(":homescreen")
