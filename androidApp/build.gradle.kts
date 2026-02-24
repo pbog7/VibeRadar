@@ -31,9 +31,6 @@ kotlin {
 configure<ApplicationExtension> {
     namespace = "com.pbogdev.viberadar"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-    androidResources {
-        noCompress += "tflite"
-    }
     defaultConfig {
         applicationId = "com.pbogdev.viberadar"
         minSdk = libs.versions.android.minSdk.get().toInt()

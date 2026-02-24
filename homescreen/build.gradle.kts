@@ -74,6 +74,7 @@ kotlin {
                 implementation(libs.kermitLogger)
                 implementation(project(":domain"))
                 implementation(project(":core"))
+                implementation(project(":aimatchmakingengine"))
                 // Add KMP dependencies here
             }
         }
