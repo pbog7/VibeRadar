@@ -22,6 +22,7 @@ kotlin {
 
         androidResources {
             enable = true
+            noCompress += "tflite"
         }
     }
 
@@ -32,6 +33,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            export(project(":aimatchmakingengine"))
         }
     }
 
@@ -93,6 +95,7 @@ kotlin {
             implementation(project(":data"))
             implementation(project(":core"))
             implementation(project(":homescreen"))
+            implementation(project(":aimatchmakingengine"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

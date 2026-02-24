@@ -10,7 +10,18 @@
 		79A0143E9A1C3841ABF854AC /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96B4CE30B215A30F38238F8D /* Pods_iosApp.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		00F1BD352F44A483009BA722 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AFF75684EDA219699950B21D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CEAEE68E1655672E7D3ABDF1;
+			remoteInfo = iosApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		00F1BD312F44A483009BA722 /* iosAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iosAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96B4CE30B215A30F38238F8D /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A41DA52C518DE7EA8EA9DDE6 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 		A452B06502E954DABFE8A42A /* VibeRadar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VibeRadar.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -28,6 +39,13 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		00F1BD322F44A483009BA722 /* iosAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = iosAppTests;
+			sourceTree = "<group>";
+		};
 		0FDE3608D753111EBE7C0BA6 /* Configuration */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -46,6 +64,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		00F1BD2E2F44A483009BA722 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FA3BF8F931F46187A054E9F6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -61,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				A452B06502E954DABFE8A42A /* VibeRadar.app */,
+				00F1BD312F44A483009BA722 /* iosAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,6 +113,7 @@
 			children = (
 				0FDE3608D753111EBE7C0BA6 /* Configuration */,
 				D9F9E34F6667671A4EE44820 /* iosApp */,
+				00F1BD322F44A483009BA722 /* iosAppTests */,
 				29FDFC9F059014ECB74D20EC /* Products */,
 				7A1607334D4935611A1C0E4D /* Pods */,
 				9BFF3B42CFC6166DE6944ECB /* Frameworks */,
@@ -96,6 +123,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		00F1BD302F44A483009BA722 /* iosAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00F1BD392F44A483009BA722 /* Build configuration list for PBXNativeTarget "iosAppTests" */;
+			buildPhases = (
+				00F1BD2D2F44A483009BA722 /* Sources */,
+				00F1BD2E2F44A483009BA722 /* Frameworks */,
+				00F1BD2F2F44A483009BA722 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00F1BD362F44A483009BA722 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				00F1BD322F44A483009BA722 /* iosAppTests */,
+			);
+			name = iosAppTests;
+			productName = iosAppTests;
+			productReference = 00F1BD312F44A483009BA722 /* iosAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		CEAEE68E1655672E7D3ABDF1 /* iosApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8DDADCB571632FC8E104DF4E /* Build configuration list for PBXNativeTarget "iosApp" */;
@@ -126,9 +174,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					00F1BD302F44A483009BA722 = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = CEAEE68E1655672E7D3ABDF1;
+					};
 					CEAEE68E1655672E7D3ABDF1 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -149,11 +201,19 @@
 			projectRoot = "";
 			targets = (
 				CEAEE68E1655672E7D3ABDF1 /* iosApp */,
+				00F1BD302F44A483009BA722 /* iosAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		00F1BD2F2F44A483009BA722 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		803D618FDA1E238CE0DB9B7D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -223,6 +283,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		00F1BD2D2F44A483009BA722 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		74D5891F2F7F5FC15F5991A7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,7 +299,59 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		00F1BD362F44A483009BA722 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CEAEE68E1655672E7D3ABDF1 /* iosApp */;
+			targetProxy = 00F1BD352F44A483009BA722 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		00F1BD372F44A483009BA722 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pbogdev.iosAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VibeRadar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VibeRadar";
+			};
+			name = Debug;
+		};
+		00F1BD382F44A483009BA722 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pbogdev.iosAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VibeRadar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VibeRadar";
+			};
+			name = Release;
+		};
 		146C85214BD36963CD4551B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 0FDE3608D753111EBE7C0BA6 /* Configuration */;
@@ -419,6 +538,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		00F1BD392F44A483009BA722 /* Build configuration list for PBXNativeTarget "iosAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00F1BD372F44A483009BA722 /* Debug */,
+				00F1BD382F44A483009BA722 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6BC382E97E0C5B184BDC1003 /* Build configuration list for PBXProject "iosApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
