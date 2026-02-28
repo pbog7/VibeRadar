@@ -1,16 +1,20 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+📡 Vibe Radar
+Privacy-First Social Discovery using Local AI & Hybrid Location Services.
+ 
+> > [!IMPORTANT]
+> **Work in Progress:** The `main` branch is reserved for stable production releases. For the latest architectural implementations, 512-dim vector matching logic, and active development, please switch to the [**`develop`** branch]
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+🛰️ The Mission
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+Vibe Radar (internally known as Project Beacon) is an open-source social discovery application designed to connect people with shared interests while maintaining absolute digital sovereignty.
+Unlike traditional platforms that track and centralize your movements, Vibe Radar utilizes a "Blind Relay" architecture. The server acts as a zero-knowledge post office—facilitating connections without ever having the keys to decrypt your profile, your precise location, or your conversations.
+
+🛡️ Privacy Pillars
+* On-Device Semantic Matching: We use Google MediaPipe to process interests locally. Your "vibe" is converted into a vector on your phone, and matching happens via local math (Cosine Similarity), not on a server.
+* Hardware-Level Location Privacy: The app is physically incapable of requesting GPS-level precision. We use coarse-only triangulation to ensure you stay "on the map" without being "on the radar".
+* Ephemeral Interactions: All communications (Voice, Text, and Live Snap) are End-to-End Encrypted (E2EE) and operate on a strict "View Once" and Time-To-Live (TTL) policy.
+* Anti-Forensic Security: Built-in protection against screenshots and unauthorized gallery access to prevent catfishing and data leaks.
+
 
 ### Build and Run Android Application
 
