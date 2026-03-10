@@ -26,6 +26,8 @@ coilVersion = "3.3.0"
 firebaseBomVersion = "34.9.0"
 googleServicesPluginVersion = "4.4.4"
 kotlinCoroutinesVersion = "1.10.2"
+cryptographyVersion = "0.5.0"
+
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinVersion" }
@@ -80,6 +82,9 @@ android-firebase-auth = { module = "com.google.firebase:firebase-auth" }
 android-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 android-firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 #android-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+cryptography-core = { group = "dev.whyoleg.cryptography", name = "cryptography-core", version.ref = "cryptographyVersion" }
+cryptography-provider-optimal = { group = "dev.whyoleg.cryptography", name = "cryptography-provider-optimal", version.ref = "cryptographyVersion" }
+cryptography-random = { group = "dev.whyoleg.cryptography", name = "cryptography-random", version.ref = "cryptographyVersion" }
 
 
 
@@ -87,6 +92,7 @@ android-firebase-firestore = { module = "com.google.firebase:firebase-firestore"
 ktor = ["ktor-client-core", "ktor-client-content-negotiation", "ktor-client-logging", "ktor-serialization-kotlinx-json"]
 koin = ["koin-core", "koin-compose", "koin-viewmodel", "koin-viewmodel-navigation"]
 kotlinXSerialization = ["kotlinx-serialization-core", "kotlinx-serialization-json"]
+cryptography = ["cryptography-core", "cryptography-provider-optimal", "cryptography-random"]
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
