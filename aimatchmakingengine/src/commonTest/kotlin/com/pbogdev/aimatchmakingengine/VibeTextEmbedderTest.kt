@@ -1,4 +1,4 @@
-package aimatchmakingengine
+package com.pbogdev.aimatchmakingengine
 
 import com.pbogdev.aimatchmakingengine.VibeTextEmbedder
 import kotlinx.coroutines.ExperimentalCoroutinesApi

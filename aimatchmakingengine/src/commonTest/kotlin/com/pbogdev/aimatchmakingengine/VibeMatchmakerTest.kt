@@ -1,4 +1,4 @@
-package aimatchmakingengine
+package com.pbogdev.aimatchmakingengine
 
 import com.pbogdev.aimatchmakingengine.VibeMatchmaker
 import com.pbogdev.domain.models.Profile

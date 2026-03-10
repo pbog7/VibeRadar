@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
@@ -68,6 +71,7 @@ kotlin {
                 implementation(libs.bundles.ktor)
                 implementation(libs.bundles.kotlinXSerialization)
                 implementation(libs.kermitLogger)
+                implementation(libs.bundles.cryptography)
                 // Add KMP dependencies here
             }
         }
@@ -75,6 +79,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotlin.coroutines.test)
             }
         }
 
@@ -107,6 +112,21 @@ kotlin {
         }
     }
 }
+
+val secretsFile = rootProject.file("secrets.properties")
+val secretsProperties = Properties()
+
+if (secretsFile.exists()) {
+    secretsProperties.load(FileInputStream(secretsFile))
+} else {
+    // Optional: Print a warning during the build if the file is missing
+    logger.warn("secrets.properties file not found at project root. BuildKonfig will fall back to environment variables or defaults.")
+}
+
+// 2. Extract the secret safely
+val vibeAppSecret: String = secretsProperties.getProperty("VIBE_APP_SECRET")
+    ?: System.getenv("VIBE_APP_SECRET")
+    ?: "fallback_secret_do_not_use_in_prod"
 val buildFlavor: String = project.findProperty("buildFlavor")?.toString() ?: "dev"
 
 buildkonfig {
@@ -116,6 +136,7 @@ buildkonfig {
     defaultConfigs {
         buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "FLAVOR", buildFlavor)
         buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "BASE_URL", "https://jsonplaceholder.typicode.com/")
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "APP_SECRET", vibeAppSecret)
     }
 
 
