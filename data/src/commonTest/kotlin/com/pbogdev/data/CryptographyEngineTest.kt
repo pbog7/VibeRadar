@@ -1,5 +1,7 @@
 package com.pbogdev.data
 
+import com.pbogdev.data.crypto.CryptographyEngine
+import com.pbogdev.data.crypto.CryptographyEngineImpl
 import com.pbogdev.domain.models.CustomResult
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test

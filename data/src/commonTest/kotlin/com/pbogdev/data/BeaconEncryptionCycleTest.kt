@@ -1,6 +1,8 @@
 package com.pbogdev.data
 
 
+import com.pbogdev.data.crypto.CryptographyEngine
+import com.pbogdev.data.crypto.CryptographyEngineImpl
 import com.pbogdev.data.network.dto.BeaconDto
 import com.pbogdev.domain.models.Beacon
 import com.pbogdev.domain.models.CustomResult
