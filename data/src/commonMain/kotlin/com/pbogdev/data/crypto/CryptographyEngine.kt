@@ -1,4 +1,4 @@
-package com.pbogdev.data
+package com.pbogdev.data.crypto
 
 import com.pbogdev.domain.models.CustomResult
 

@@ -1,4 +1,4 @@
-package com.pbogdev.data
+package com.pbogdev.data.crypto
 
 import com.pbogdev.domain.models.CustomError
 import com.pbogdev.domain.models.CustomResult
@@ -9,6 +9,7 @@ import dev.whyoleg.cryptography.CryptographyProvider
 import dev.whyoleg.cryptography.algorithms.AES
 import dev.whyoleg.cryptography.algorithms.HKDF
 import dev.whyoleg.cryptography.algorithms.SHA256
+import dev.whyoleg.cryptography.operations.Cipher
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -42,7 +43,7 @@ class CryptographyEngineImpl(
         }
     }
 
-    private suspend fun deriveAesGcmCipher(geohash: String, timeWindow: String): dev.whyoleg.cryptography.operations.Cipher {
+    private suspend fun deriveAesGcmCipher(geohash: String, timeWindow: String): Cipher {
         // 1. Initialize the required algorithms
         val hkdf = provider.get(HKDF)
         val aesGcm = provider.get(AES.GCM)
