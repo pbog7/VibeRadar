@@ -61,11 +61,11 @@ class GeohashEngineImpl : GeohashEngine {
         return geohash.toString()
     }
 
-    override fun getAdjacent(hash: String, direction: Direction): String {
-        if (hash.isEmpty()) return ""
-        val lastChar = hash.last().lowercaseChar()
-        val type = hash.length % 2 // 0 for Even, 1 for Odd
-        var base = hash.dropLast(1)
+    override fun getAdjacent(geohash: String, direction: Direction): String {
+        if (geohash.isEmpty()) return ""
+        val lastChar = geohash.last().lowercaseChar()
+        val type = geohash.length % 2 // 0 for Even, 1 for Odd
+        var base = geohash.dropLast(1)
 
         // Recursive border crossing
         if (borders[direction]!![type].contains(lastChar)) {
@@ -76,16 +76,15 @@ class GeohashEngineImpl : GeohashEngine {
         return base + base32[index]
     }
 
-    override fun getNineBoxGrid(latitude: Double, longitude: Double, precision: Int): List<String> {
-        val center = encode(latitude, longitude, precision)
+    override fun getNineBoxGrid(geohash: String): List<String> {
 
-        val top = getAdjacent(center, TOP)
-        val bottom = getAdjacent(center, BOTTOM)
-        val right = getAdjacent(center, RIGHT)
-        val left = getAdjacent(center, LEFT)
+        val top = getAdjacent(geohash, TOP)
+        val bottom = getAdjacent(geohash, BOTTOM)
+        val right = getAdjacent(geohash, RIGHT)
+        val left = getAdjacent(geohash, LEFT)
 
         return listOf(
-            center,
+            geohash,
             top,
             bottom,
             right,

@@ -27,6 +27,8 @@ firebaseBomVersion = "34.9.0"
 googleServicesPluginVersion = "4.4.4"
 kotlinCoroutinesVersion = "1.10.2"
 cryptographyVersion = "0.5.0"
+preferencesDatastoreVersion = "1.2.1"
+okioVersion = "3.17.0"
 
 
 [libraries]
@@ -49,6 +51,7 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatformVersion" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatformVersion" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatformVersion" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinCoroutinesVersion" }
 mediapipe-tasks-text = { group = "com.google.mediapipe", name = "tasks-text", version.ref = "mediapipe-text" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinVersion" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
@@ -60,6 +63,7 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorVersion" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorVersion" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorVersion" }
+ktor-mock = {module = "io.ktor:ktor-client-mock", version.ref = "ktorVersion" }
 # --- Ktor END ---
 # --- Koin START---
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinVersion" }
@@ -74,17 +78,24 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 # --- Kotlinx serialization END ---
 material3Adaptive = { module = "org.jetbrains.compose.material3:material3-adaptive-navigation-suite", version.ref = "material3Version" }
 kermitLogger = { module = "co.touchlab:kermit", version.ref = "kermitLoggerVersion" }
-# --- Coil image loading library END ---
+# --- Coil image loading library START ---
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilVersion" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "ktorVersion" }
+# --- Coil image loading library END ---
+# --- Firebase  START ---
 android-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
 android-firebase-auth = { module = "com.google.firebase:firebase-auth" }
 android-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 android-firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 #android-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+# --- Firebase  END ---
+# --- Cryptography START ---
 cryptography-core = { group = "dev.whyoleg.cryptography", name = "cryptography-core", version.ref = "cryptographyVersion" }
 cryptography-provider-optimal = { group = "dev.whyoleg.cryptography", name = "cryptography-provider-optimal", version.ref = "cryptographyVersion" }
 cryptography-random = { group = "dev.whyoleg.cryptography", name = "cryptography-random", version.ref = "cryptographyVersion" }
+# --- Cryptography END ---
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "preferencesDatastoreVersion"}
+okio = { module = "com.squareup.okio:okio", version.ref = "okioVersion"}
 
 
 

@@ -12,10 +12,10 @@ interface GeohashEngine {
     /**
      * Calculates the adjacent Geohash string in a specific direction.
      */
-    fun getAdjacent(hash: String, direction: Direction): String
+    fun getAdjacent(geohash: String, direction: Direction): String
 
     /**
      * Generates the 9-box grid (current location + 8 neighbors) for optimized Firestore 'IN' querying.
      */
-    fun getNineBoxGrid(latitude: Double, longitude: Double, precision: Int = 5): List<String>
+    fun getNineBoxGrid(geohash:String): List<String>
 }

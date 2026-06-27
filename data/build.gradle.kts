@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.invoke
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -7,6 +8,7 @@ plugins {
     alias(libs.plugins.androidLint)
     alias(libs.plugins.buildKonfig)
     alias(libs.plugins.kotlinSerializationPlugin)
+    alias(libs.plugins.kotlinCocoapods)
 }
 
 kotlin {
@@ -55,7 +57,22 @@ kotlin {
             baseName = xcfName
         }
     }
+    cocoapods {
+        // 1. REQUIRED: Labels your shared code so Xcode can read it
+        version = "1.0.0"
+        summary = "Vibe Radar Shared Module"
+        homepage = "https://github.com/pbogdev/viberadar"
 
+        // 2. REQUIRED: Tells the compiler to build for iOS 17
+        ios.deploymentTarget = "17.6"
+        noPodspec()
+        // 3. THE REASON YOU ARE DOING THIS: Adds MediaPipe
+        pod("FirebaseAuth") {
+            version = "~> 12.9.0"
+            extraOpts += listOf("-compiler-option", "-fmodules")
+        }
+        // 4. REQUIRED: Links to the Podfile you made
+    }
     // Source set declarations.
     // Declaring a target automatically creates a source set with the same name. By default, the
     // Kotlin Gradle Plugin creates additional source sets that depend on each other, since it is
@@ -72,6 +89,8 @@ kotlin {
                 implementation(libs.bundles.kotlinXSerialization)
                 implementation(libs.kermitLogger)
                 implementation(libs.bundles.cryptography)
+                implementation(libs.datastore)
+                implementation(libs.okio)
                 // Add KMP dependencies here
             }
         }
@@ -80,12 +99,17 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlin.coroutines.test)
+                implementation(libs.ktor.mock)
             }
         }
 
         androidMain {
             dependencies {
+                implementation(project.dependencies.platform(libs.android.firebase.bom))
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.android.firebase.auth)
+                implementation(libs.kotlin.coroutines)
+                implementation(libs.kotlinx.coroutines.play.services)
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
@@ -127,6 +151,8 @@ if (secretsFile.exists()) {
 val vibeAppSecret: String = secretsProperties.getProperty("VIBE_APP_SECRET")
     ?: System.getenv("VIBE_APP_SECRET")
     ?: "fallback_secret_do_not_use_in_prod"
+val firebaseProjectId:String = secretsProperties.getProperty(("FIREBASE_PROJECT_ID"))
+    ?: System.getenv("FIREBASE_PROJECT_ID")
 val buildFlavor: String = project.findProperty("buildFlavor")?.toString() ?: "dev"
 
 buildkonfig {
@@ -137,6 +163,7 @@ buildkonfig {
         buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "FLAVOR", buildFlavor)
         buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "BASE_URL", "https://jsonplaceholder.typicode.com/")
         buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "APP_SECRET", vibeAppSecret)
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "FIREBASE_PROJECT_ID", firebaseProjectId)
     }
 
 

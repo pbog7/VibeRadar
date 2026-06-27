@@ -6,4 +6,6 @@ sealed class CustomError : Exception() {
     data class NetworkError(override val message: String = "Something went wrong") : CustomError()
     data class EncryptionError(override val message: String? = "Encryption error"): CustomError()
     data class DecryptionError(override val message: String?,  override val cause: Throwable? = null):CustomError()
+
+    data class GeohashNotStored(override val message: String = "Geohash has not been stored"): CustomError()
 }
