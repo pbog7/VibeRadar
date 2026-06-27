@@ -73,7 +73,7 @@ class FirestoreKtorExtTest {
 
         val client = createMockClient(validJson)
         val result = client.queryFirestore<TestDto>("test-project", "TestCollection") {
-            whereIn("some_field", listOf("value1"))
+            whereIn("some_field", setOf("value1"))
         }
 
         assertEquals(1, result.size)
@@ -104,7 +104,7 @@ class FirestoreKtorExtTest {
                   "name": "projects/test-project/databases/(default)/documents/Relays/beacon_999",
                   "fields": {
                     "payload": { "stringValue": "encrypted_byte_string" },
-                    "expiresAt": { "seconds": 1782806400, "nanoseconds": 0 },
+                    "expiresAt": { "timestampValue": "2026-12-31T23:59:59Z" },
                     "tags": { 
                       "arrayValue": { 
                         "values": [ 
@@ -123,7 +123,7 @@ class FirestoreKtorExtTest {
 
         // Act
         val result = client.queryFirestore<ComplexTestDto>("test-project", "Relays") {
-            whereIn("geohash", listOf("u2x1"))
+            whereIn("geohash", setOf("u2x1"))
         }
 
         // Assert
@@ -132,7 +132,7 @@ class FirestoreKtorExtTest {
 
         assertEquals("beacon_999", result[0].id)
         assertEquals("encrypted_byte_string", data.payload.stringValue)
-        assertEquals(1782806400, data.expiresAt.seconds)
+        assertEquals("2026-12-31T23:59:59Z", data.expiresAt.timeStampValue)
         assertNull(data.optionalNote, "Missing JSON fields should safely parse to null")
 
         assertEquals(2, data.tags.arrayValue.values.size)
@@ -162,7 +162,7 @@ class FirestoreKtorExtTest {
 
         // Act & Assert (If it doesn't crash, the test passes!)
         val result = client.queryFirestore<TestDto>("test-project", "TestCollection") {
-            whereIn("some_field", listOf("value1"))
+            whereIn("some_field", setOf("value1"))
         }
 
         assertEquals("Safe Data", result[0].data.title.stringValue)
@@ -192,7 +192,7 @@ class FirestoreKtorExtTest {
 
         // Act
         val result = client.queryFirestore<TestDto>("test-project", "TestCollection") {
-            whereIn("some_field", listOf("value1"))
+            whereIn("some_field", setOf("value1"))
         }
 
         // Assert
@@ -208,7 +208,7 @@ class FirestoreKtorExtTest {
         val emptyJson = """ [ { "readTime": "2023-01-01T00:00:00Z" } ] """
         val client = createMockClient(emptyJson)
         val result = client.queryFirestore<TestDto>("test-project", "TestCollection") {
-            whereIn("some_field", listOf("value1"))
+            whereIn("some_field", setOf("value1"))
         }
         assertTrue(result.isEmpty())
     }
@@ -222,7 +222,7 @@ class FirestoreKtorExtTest {
 
         val exception = assertFailsWith<IllegalStateException> {
             client.queryFirestore<TestDto>("test-project", "TestCollection") {
-                whereIn("some_field", listOf("value1"))
+                whereIn("some_field", setOf("value1"))
             }
         }
         assertTrue(exception.message!!.contains("400"))
@@ -235,7 +235,7 @@ class FirestoreKtorExtTest {
 
         assertFailsWith<SerializationException> {
             client.queryFirestore<TestDto>("test-project", "TestCollection") {
-                whereIn("some_field", listOf("value1"))
+                whereIn("some_field", setOf("value1"))
             }
         }
     }
