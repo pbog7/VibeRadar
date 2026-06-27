@@ -24,3 +24,5 @@ node_modules/
 **/iosApp/Podfile.lock
 *.framework/
 *.xcframework/
+repomix-output.md
+repomix-output.xml

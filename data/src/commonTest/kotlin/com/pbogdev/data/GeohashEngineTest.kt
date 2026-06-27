@@ -10,19 +10,23 @@ import kotlin.test.assertTrue
 class GeohashEngineTest {
 
     private val engine: GeohashEngine = GeohashEngineImpl()
+    private val latitude = 42.0
+    private val longitude = 21.4
+    private val precision = 5
+    private val geoHash = "srrny"
 
     @Test
     fun `test standard encoding - Skopje, Karpos coordinates`() {
-        val hash = engine.encode(42.0, 21.4, 5)
-        assertEquals(5, hash.length)
-        assertEquals(expected = "srrny", actual = hash, message = "Standard encoding failed to provide correct geohash")
+        val hash = engine.encode(latitude = latitude, longitude = longitude, precision = precision)
+        assertEquals(precision, hash.length)
+        assertEquals(expected = geoHash, actual = hash, message = "Standard encoding failed to provide correct geohash")
     }
     @Test
     fun `test variable precision encoding`() {
         // High precision test (9 characters) to ensure the bitwise loop scales perfectly
         val hashHigh = engine.encode(42.0, 21.4, 9)
         assertEquals(9, hashHigh.length)
-        assertTrue(hashHigh.startsWith("srrny"), "High precision must maintain the parent prefix")
+        assertTrue(hashHigh.startsWith(geoHash), "High precision must maintain the parent prefix")
     }
     // --- MID-GRID ADJACENCY TESTS ---
 
@@ -107,7 +111,7 @@ class GeohashEngineTest {
     @Test
     fun `test nine box generation rules`() {
         // Generate the 9-box grid for a generic point
-        val grid = engine.getNineBoxGrid(42.0, 21.4, 5)
+        val grid = engine.getNineBoxGrid(geoHash)
 
         // Rule 1: Must generate exactly 9 boxes
         assertEquals(9, grid.size, "Must return exactly 9 hashes")
@@ -117,9 +121,9 @@ class GeohashEngineTest {
         assertEquals(9, uniqueHashes.size, "All 9 hashes must be strictly unique")
 
         // Rule 3: All boxes must retain the exact precision length
-        assertTrue(grid.all { it.length == 5 }, "All neighbors must match center precision")
+        assertTrue(grid.all { it.length == precision }, "All neighbors must match center precision")
 
         // Rule 4: The original center must be included in the list
-        assertTrue(grid.contains("srrny"), "The 9-box grid must contain the center coordinate")
+        assertTrue(grid.contains(geoHash), "The 9-box grid must contain the center coordinate")
     }
 }
