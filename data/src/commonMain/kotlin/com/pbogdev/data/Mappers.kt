@@ -29,17 +29,19 @@ fun Profile.toProfileDto() = ProfileDto(
 
 fun BeaconDto.toBeacon() = Beacon(
     beaconId = beaconId,
-    profile = profile.toProfile(),
+    profile = profile?.toProfile(),
     vibeVector = vibeVector,
-    timestamp = timestamp
+    expiresAt = expiresAtEpochMillis,
+    vibe = vibe
 )
 
 
 
 fun Beacon.toBeaconDto() = BeaconDto(
     beaconId = beaconId,
-    profile = profile.toProfileDto(),
+    profile = profile?.toProfileDto(),
     vibeVector = vibeVector,
-    timestamp = timestamp
+    expiresAtEpochMillis = expiresAt,
+    vibe = vibe
 )
 

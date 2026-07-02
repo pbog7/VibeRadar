@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.pbogdev.aimatchmakingengine.VibeTextEmbedder
+import com.pbogdev.domain.textEmbedder.VibeTextEmbedder
 import com.pbogdev.core.appLogger
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -45,8 +45,7 @@ fun HomeScreen(
         SendVibeBtn({
             appLogger.i { "Vibe ${state.vibe.text} sent" }
             scope.launch {
-                val result = vibeTextEmbedder.embed(state.vibe.text.toString())
-                result?.forEach { appLogger.i { "$it" } }
+                viewModel.uploadBeacon(expiresAt = 1783382400000)
             }
         }
 

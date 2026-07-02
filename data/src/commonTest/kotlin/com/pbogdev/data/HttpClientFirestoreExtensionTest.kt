@@ -2,10 +2,12 @@ package com.pbogdev.data
 
 
 
-import com.pbogdev.data.firestore.models.ArrayValueWrapper
-import com.pbogdev.data.firestore.models.StringValue
-import com.pbogdev.data.firestore.models.TimestampValue
+import com.pbogdev.core.dispatcherProvider.DispatcherProvider
+import com.pbogdev.data.firestore.wrapperModels.ArrayValueWrapper
+import com.pbogdev.data.firestore.wrapperModels.StringValue
+import com.pbogdev.data.firestore.wrapperModels.TimestampValue
 import com.pbogdev.data.firestore.queryFirestore
+import com.pbogdev.testcore.TestDispatcherProvider
 import io.ktor.client.*
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
@@ -33,7 +35,7 @@ internal data class ComplexTestDto(
 )
 
 class FirestoreKtorExtTest {
-
+    private val testDispatcherProvider: DispatcherProvider = TestDispatcherProvider()
     // Helper function to create a fake Ktor client
     private fun createMockClient(
         responseJson: String,
@@ -72,7 +74,11 @@ class FirestoreKtorExtTest {
         """.trimIndent()
 
         val client = createMockClient(validJson)
-        val result = client.queryFirestore<TestDto>("test-project", "TestCollection") {
+        val result = client.queryFirestore<TestDto>(
+            projectId = "test-project", 
+            collection = "TestCollection", 
+            dispatcherProvider = testDispatcherProvider
+        ) {
             whereIn("some_field", setOf("value1"))
         }
 
@@ -85,7 +91,11 @@ class FirestoreKtorExtTest {
     fun `queryFirestore throws Exception if builder is missing where clause`() = runTest {
         val client = createMockClient("[]")
         val exception = assertFailsWith<IllegalStateException> {
-            client.queryFirestore<TestDto>("test-project", "TestCollection") {
+            client.queryFirestore<TestDto>(
+                projectId = "test-project", 
+                collection = "TestCollection", 
+                dispatcherProvider = testDispatcherProvider
+            ) {
                 // Intentionally forgetting whereIn()
             }
         }
@@ -122,7 +132,11 @@ class FirestoreKtorExtTest {
         val client = createMockClient(complexJson)
 
         // Act
-        val result = client.queryFirestore<ComplexTestDto>("test-project", "Relays") {
+        val result = client.queryFirestore<ComplexTestDto>(
+            projectId = "test-project", 
+            collection = "Relays", 
+            dispatcherProvider = testDispatcherProvider
+        ) {
             whereIn("geohash", setOf("u2x1"))
         }
 
@@ -161,7 +175,11 @@ class FirestoreKtorExtTest {
         val client = createMockClient(jsonWithUnknownKeys)
 
         // Act & Assert (If it doesn't crash, the test passes!)
-        val result = client.queryFirestore<TestDto>("test-project", "TestCollection") {
+        val result = client.queryFirestore<TestDto>(
+            projectId = "test-project", 
+            collection = "TestCollection", 
+            dispatcherProvider = testDispatcherProvider
+        ) {
             whereIn("some_field", setOf("value1"))
         }
 
@@ -191,7 +209,11 @@ class FirestoreKtorExtTest {
         val client = createMockClient(multiJson)
 
         // Act
-        val result = client.queryFirestore<TestDto>("test-project", "TestCollection") {
+        val result = client.queryFirestore<TestDto>(
+            projectId = "test-project", 
+            collection = "TestCollection", 
+            dispatcherProvider = testDispatcherProvider
+        ) {
             whereIn("some_field", setOf("value1"))
         }
 
@@ -207,7 +229,11 @@ class FirestoreKtorExtTest {
     fun `queryFirestore ignores empty wrapper objects without crashing`() = runTest {
         val emptyJson = """ [ { "readTime": "2023-01-01T00:00:00Z" } ] """
         val client = createMockClient(emptyJson)
-        val result = client.queryFirestore<TestDto>("test-project", "TestCollection") {
+        val result = client.queryFirestore<TestDto>(
+            projectId = "test-project", 
+            collection = "TestCollection", 
+            dispatcherProvider = testDispatcherProvider
+        ) {
             whereIn("some_field", setOf("value1"))
         }
         assertTrue(result.isEmpty())
@@ -221,7 +247,11 @@ class FirestoreKtorExtTest {
         val client = createMockClient(errorJson, HttpStatusCode.BadRequest)
 
         val exception = assertFailsWith<IllegalStateException> {
-            client.queryFirestore<TestDto>("test-project", "TestCollection") {
+            client.queryFirestore<TestDto>(
+                projectId = "test-project", 
+                collection = "TestCollection", 
+                dispatcherProvider = testDispatcherProvider
+            ) {
                 whereIn("some_field", setOf("value1"))
             }
         }
@@ -234,7 +264,11 @@ class FirestoreKtorExtTest {
         val client = createMockClient(badJson)
 
         assertFailsWith<SerializationException> {
-            client.queryFirestore<TestDto>("test-project", "TestCollection") {
+            client.queryFirestore<TestDto>(
+                projectId = "test-project", 
+                collection = "TestCollection", 
+                dispatcherProvider = testDispatcherProvider
+            ) {
                 whereIn("some_field", setOf("value1"))
             }
         }

@@ -1,11 +1,13 @@
 package com.pbogdev.aimatchmakingengine
 
-import com.pbogdev.aimatchmakingengine.VibeTextEmbedder
+import com.pbogdev.domain.models.CustomResult
+import com.pbogdev.domain.textEmbedder.VibeTextEmbedder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -26,7 +28,8 @@ abstract class VibeTextEmbedderTest {
         val vibeTextEmbedder = getVibeTextEmbedder()
         val result = vibeTextEmbedder.embed("I want to go hiking")
         assertNotNull(result)
-        assertEquals(512,result.size)
+        assertIs<CustomResult.Success<FloatArray>>(result)
+        assertEquals(512,result.data.size)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

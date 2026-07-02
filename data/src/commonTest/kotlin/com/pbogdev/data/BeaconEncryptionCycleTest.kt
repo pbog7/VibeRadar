@@ -1,12 +1,14 @@
 package com.pbogdev.data
 
 
+import com.pbogdev.core.dispatcherProvider.DispatcherProvider
 import com.pbogdev.data.crypto.CryptographyEngine
 import com.pbogdev.data.crypto.CryptographyEngineImpl
 import com.pbogdev.data.network.dto.BeaconDto
 import com.pbogdev.domain.models.Beacon
 import com.pbogdev.domain.models.CustomResult
 import com.pbogdev.domain.models.Profile
+import com.pbogdev.testcore.TestDispatcherProvider
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
@@ -15,8 +17,10 @@ import kotlin.test.assertTrue
 
 
 class BeaconEncryptionCycleTest {
+    private val testDispatcherProvider: DispatcherProvider = TestDispatcherProvider()
 
-    private val cryptoEngine: CryptographyEngine = CryptographyEngineImpl()
+    private val cryptoEngine: CryptographyEngine =
+        CryptographyEngineImpl(dispatcherProvider = testDispatcherProvider)
 
     private val originalDomainBeacon = Beacon(
         beaconId = "beacon_abc123",
@@ -28,11 +32,12 @@ class BeaconEncryptionCycleTest {
             dislikesVector = floatArrayOf(-0.95f, 0.10f)
         ),
         vibeVector = floatArrayOf(0.77f, -0.11f),
-        timestamp = 1710080000L
+        expiresAt = 1710080000L,
+        vibe =  "I like to go on a roadtrip"
     )
 
     private val geohash = "sr2ym"
-    private val timeWindow = "2026-03-10-UTC"
+    private val timeWindow = 1710080000L
 
     // ==========================================
     // TEST 1: The Mapping Layer
@@ -84,10 +89,15 @@ class BeaconEncryptionCycleTest {
         // Act - OUTBOUND
         val dtoOut = originalDomainBeacon.toBeaconDto()
         val jsonString = Json.encodeToString(dtoOut)
-        val encryptedBase64 = (cryptoEngine.encrypt(jsonString, geohash, timeWindow) as CustomResult.Success).data
+        val encryptedBase64 =
+            (cryptoEngine.encrypt(jsonString, geohash, timeWindow) as CustomResult.Success).data
 
         // Act - INBOUND
-        val decryptedJsonString = (cryptoEngine.decrypt(encryptedBase64, geohash, timeWindow) as CustomResult.Success).data
+        val decryptedJsonString = (cryptoEngine.decrypt(
+            encryptedBase64,
+            geohash,
+            timeWindow
+        ) as CustomResult.Success).data
         val dtoIn = Json.decodeFromString<BeaconDto>(decryptedJsonString)
         val reconstructedDomain = dtoIn.toBeacon()
 
