@@ -1,7 +1,11 @@
 package com.pbogdev.domain.models
 
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
+@OptIn(ExperimentalUuidApi::class)
 data class Profile(
-    val id: String,
+    val id: String = Uuid.generateV7().toString(),
     val likes: String,
     val dislikes: String?,
     val likesVector: FloatArray,

@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.invoke
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -40,12 +39,6 @@ kotlin {
     // https://developer.android.com/kotlin/multiplatform/migrate
     val xcfName = "dataKit"
 
-    iosX64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
-
     iosArm64 {
         binaries.framework {
             baseName = xcfName
@@ -83,6 +76,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(project(":domain"))
+                implementation(project(":core"))
                 implementation(libs.bundles.koin)
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.bundles.ktor)
@@ -100,6 +94,7 @@ kotlin {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlin.coroutines.test)
                 implementation(libs.ktor.mock)
+                implementation(project(":testCore"))
             }
         }
 
@@ -128,7 +123,7 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.darwin)
                 // Add iOS-specific dependencies here. This a source set created by Kotlin Gradle
-                // Plugin (KGP) that each specific iOS target (e.g., iosX64) depends on as
+                // Plugin (KGP) that each specific iOS target  depends on as
                 // part of KMP’s default source set hierarchy. Note that this source set depends
                 // on common by default and will correctly pull the iOS artifacts of any
                 // KMP dependencies declared in commonMain.

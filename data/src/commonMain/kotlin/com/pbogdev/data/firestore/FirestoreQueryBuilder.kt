@@ -1,14 +1,14 @@
 package com.pbogdev.data.firestore
 
-import com.pbogdev.data.firestore.models.ArrayValue
-import com.pbogdev.data.firestore.models.ArrayValueWrapper
-import com.pbogdev.data.firestore.models.CollectionSelector
-import com.pbogdev.data.firestore.models.FieldFilter
-import com.pbogdev.data.firestore.models.FieldReference
-import com.pbogdev.data.firestore.models.Filter
-import com.pbogdev.data.firestore.models.QueryRequest
-import com.pbogdev.data.firestore.models.StringValue
-import com.pbogdev.data.firestore.models.StructuredQuery
+import com.pbogdev.data.firestore.wrapperModels.ArrayValue
+import com.pbogdev.data.firestore.wrapperModels.ArrayValueWrapper
+import com.pbogdev.data.firestore.wrapperModels.CollectionSelector
+import com.pbogdev.data.firestore.wrapperModels.FieldFilter
+import com.pbogdev.data.firestore.wrapperModels.FieldReference
+import com.pbogdev.data.firestore.wrapperModels.Filter
+import com.pbogdev.data.firestore.wrapperModels.QueryRequest
+import com.pbogdev.data.firestore.wrapperModels.StringValue
+import com.pbogdev.data.firestore.wrapperModels.StructuredQuery
 
 
 class FirestoreQueryBuilder(private val collection: String) {

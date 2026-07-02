@@ -1,22 +1,25 @@
 package com.pbogdev.data
 
+import com.pbogdev.core.dispatcherProvider.DispatcherProvider
 import com.pbogdev.data.crypto.CryptographyEngine
 import com.pbogdev.data.crypto.CryptographyEngineImpl
 import com.pbogdev.domain.models.CustomResult
+import com.pbogdev.testcore.TestDispatcherProvider
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class CryptographyEngineTest {
+    private val testDispatcherProvider: DispatcherProvider = TestDispatcherProvider()
 
-    private val cryptoEngine: CryptographyEngine = CryptographyEngineImpl()
+    private val cryptoEngine: CryptographyEngine = CryptographyEngineImpl(dispatcherProvider = testDispatcherProvider)
 
     // Shared Test Constants
     private val defaultJson =
         """{"profile":{"likes":["coffee"],"currentVibe":"chill"},"timestamp":1710080000}"""
     private val defaultGeohash = "srrny" // Skopje
-    private val defaultTimeWindow = "2026-03-10-UTC"
+    private val defaultTimeWindow: Long = 1710080000
 
     @Test
     fun `encrypt and decrypt with exact matching metadata returns original payload`() = runTest {
@@ -67,7 +70,7 @@ class CryptographyEngineTest {
         ) as CustomResult.Success).data
 
         // Act - App tries to derive the key using tomorrow's date
-        val wrongTimeWindow = "2026-03-11-UTC"
+        val wrongTimeWindow = 2710080000
         val decryptResult = cryptoEngine.decrypt(encryptedBase64, defaultGeohash, wrongTimeWindow)
 
         // Assert

@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.edit
 import com.pbogdev.data.local.VibeRadarPreferences.LAST_KNOWN_GEOHASH
 import com.pbogdev.data.local.VibeRadarPreferences.LAST_KNOWN_GEOHASH_GRID
 import com.pbogdev.data.location.GeohashEngine
-import com.pbogdev.data.utils.safeResult
+import com.pbogdev.core.utils.safeResult
 import com.pbogdev.domain.LocationManager
 import com.pbogdev.domain.models.CustomError
 import com.pbogdev.domain.models.CustomResult

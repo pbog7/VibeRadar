@@ -11,6 +11,8 @@ data class EncryptedBeaconDTO(
     val payloadBase64: String,
     @SerialName("geohash")
     val geohash: String,
-    @SerialName("expiresAt")
-    val expiresAt: Long
+    @SerialName("expiresAtEpochMillis")
+    val expiresAtEpochMillis: Long,
+    @SerialName("senderUid")
+    val senderUid: String
 )
