@@ -2,7 +2,7 @@ package com.pbogdev.aimatchmakingengine
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.pbogdev.domain.textEmbedder.VibeTextEmbedder
+import com.pbogdev.domain.matchmaking.VibeTextEmbedder
 import com.pbogdev.testcore.TestDispatcherProvider
 import org.junit.runner.RunWith
 

@@ -22,7 +22,7 @@ suspend inline fun <reified T> HttpClient.queryFirestore(
     collection: String,
     dispatcherProvider: DispatcherProvider,
     crossinline buildQuery: FirestoreQueryBuilder.() -> Unit
-): List<FirestoreDocument<T>> { // <-- Look how clean this return type is now!
+): List<FirestoreDocument<T>> {
 
     val builder = FirestoreQueryBuilder(collection)
     builder.buildQuery()

@@ -1,6 +1,6 @@
 package com.pbogdev.viberadar.di
 
-import com.pbogdev.aimatchmakingengine.aiPlatformModule
+import com.pbogdev.aimatchmakingengine.aiMatchmakingModule
 import com.pbogdev.core.di.coreModule
 import com.pbogdev.data.di.dataModule
 import com.pbogdev.homescreen.di.homeScreenModule
@@ -13,7 +13,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
         dataModule,
         domainModule,
         homeScreenModule,
-        aiPlatformModule,
+        aiMatchmakingModule,
         coreModule
         // add other modules here
     )

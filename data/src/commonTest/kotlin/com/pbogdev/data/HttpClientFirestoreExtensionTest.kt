@@ -59,7 +59,7 @@ class FirestoreKtorExtTest {
     // --- Basic & Validation Tests ---
 
     @Test
-    fun `queryFirestore successfully parses valid Google gRPC JSON`() = runTest {
+    fun `queryFirestore_successfully_parses_valid Google_gRPC_JSON`() = runTest {
         val validJson = """
             [
               {
@@ -88,7 +88,7 @@ class FirestoreKtorExtTest {
     }
 
     @Test
-    fun `queryFirestore throws Exception if builder is missing where clause`() = runTest {
+    fun `queryFirestore_throws Exception_if_builder_is_missing_where_clause`() = runTest {
         val client = createMockClient("[]")
         val exception = assertFailsWith<IllegalStateException> {
             client.queryFirestore<TestDto>(
@@ -105,7 +105,7 @@ class FirestoreKtorExtTest {
     // --- Edge Case Tests ---
 
     @Test
-    fun `queryFirestore successfully parses complex nested fields, arrays, and missing values`() = runTest {
+    fun queryFirestore_successfully_parses_complex_nested_fields_arrays_and_missing_values() = runTest {
         // Arrange: Missing 'optionalNote', deeply nested 'tags' array
         val complexJson = """
             [
@@ -155,7 +155,7 @@ class FirestoreKtorExtTest {
     }
 
     @Test
-    fun `queryFirestore ignores unknown Google metadata fields without crashing`() = runTest {
+    fun queryFirestore_ignores_unknown_Google_metadata_fields_without_crashing() = runTest {
         // Arrange: Google injects 'createTime' and 'updateTime', which are NOT in our TestDto
         val jsonWithUnknownKeys = """
             [
@@ -187,7 +187,7 @@ class FirestoreKtorExtTest {
     }
 
     @Test
-    fun `queryFirestore parses multiple documents in a single array`() = runTest {
+    fun queryFirestore_parses_multiple_documents_in_a_single_array() = runTest {
         // Arrange: Two valid documents in the array
         val multiJson = """
             [
@@ -226,7 +226,7 @@ class FirestoreKtorExtTest {
     }
 
     @Test
-    fun `queryFirestore ignores empty wrapper objects without crashing`() = runTest {
+    fun queryFirestore_ignores_empty_wrapper_objects_without_crashing() = runTest {
         val emptyJson = """ [ { "readTime": "2023-01-01T00:00:00Z" } ] """
         val client = createMockClient(emptyJson)
         val result = client.queryFirestore<TestDto>(
@@ -242,7 +242,7 @@ class FirestoreKtorExtTest {
     // --- Error Handling Tests ---
 
     @Test
-    fun `queryFirestore throws Exception on 400 Bad Request`() = runTest {
+    fun queryFirestore_throws_Exception_on_400_Bad_Request() = runTest {
         val errorJson = """{ "error": { "code": 400, "message": "FAILED_PRECONDITION" } }"""
         val client = createMockClient(errorJson, HttpStatusCode.BadRequest)
 
@@ -259,7 +259,7 @@ class FirestoreKtorExtTest {
     }
 
     @Test
-    fun `queryFirestore throws SerializationException on completely malformed JSON`() = runTest {
+    fun queryFirestore_throws_SerializationException_on_completely_malformed_JSON() = runTest {
         val badJson = """ { "random_garbage": true } """
         val client = createMockClient(badJson)
 

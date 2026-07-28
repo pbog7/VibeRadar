@@ -1,7 +1,7 @@
 package com.pbogdev.domain.usecase
 
 import com.pbogdev.domain.models.CustomResult
-import com.pbogdev.domain.textEmbedder.VibeTextEmbedder
+import com.pbogdev.domain.matchmaking.VibeTextEmbedder
 import com.pbogdev.domain.usecase.base.BaseUseCase
 
 class GetTextEmbeddingUseCase(private val textEmbedder: VibeTextEmbedder) :

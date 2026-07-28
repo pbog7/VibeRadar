@@ -19,4 +19,6 @@ sealed class CustomError : Exception() {
         CustomError()
     data class UserNotLoggedIn (override val message: String ="User is not logged in"): CustomError()
 
+    data class BeaconNotStored(override val message: String = "Beacon has not been stored"): CustomError()
+
 }

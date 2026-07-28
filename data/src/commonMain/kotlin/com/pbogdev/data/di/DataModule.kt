@@ -3,7 +3,8 @@ package com.pbogdev.data.di
 
 import com.pbogdev.data.crypto.CryptographyEngine
 import com.pbogdev.data.crypto.CryptographyEngineImpl
-import com.pbogdev.data.local.LocationManagerImpl
+import com.pbogdev.data.local.LocalBeaconManagerImpl
+import com.pbogdev.data.local.GeohashManagerImpl
 import com.pbogdev.data.location.GeohashEngine
 import com.pbogdev.data.location.GeohashEngineImpl
 import com.pbogdev.data.network.ApiService
@@ -12,7 +13,8 @@ import com.pbogdev.data.network.httpLogger
 import com.pbogdev.data.repository.BeaconRepositoryImpl
 import com.pbogdev.data.repository.ExampleRepositoryImpl
 import com.pbogdev.data.utils.appJson
-import com.pbogdev.domain.LocationManager
+import com.pbogdev.domain.LocalBeaconManager
+import com.pbogdev.domain.GeohashManager
 import com.pbogdev.domain.auth.AnonymousAuthenticator
 import com.pbogdev.domain.models.CustomResult
 import com.pbogdev.domain.repository.BeaconRepository
@@ -82,8 +84,9 @@ val dataModule = module {
             }
         }
     }
+    singleOf(::LocalBeaconManagerImpl) bind LocalBeaconManager::class
     singleOf(::GeohashEngineImpl) bind GeohashEngine::class
-    singleOf(::LocationManagerImpl) bind LocationManager::class
+    singleOf(::GeohashManagerImpl) bind GeohashManager::class
     singleOf(::ApiServiceImpl) bind ApiService::class
     singleOf(::ExampleRepositoryImpl) bind ExampleRepository::class
     single<CryptographyEngine> {
