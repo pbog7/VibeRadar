@@ -86,6 +86,7 @@ kotlin {
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
+            implementation(libs.compose.navigationevent)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.bundles.koin)
             implementation(libs.coil.compose)
@@ -96,6 +97,8 @@ kotlin {
             implementation(project(":core"))
             implementation(project(":homescreen"))
             implementation(project(":aimatchmakingengine"))
+            implementation(project(":sharedUI"))
+            implementation(project(":settingscreen"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -130,6 +133,7 @@ kotlin {
 
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
+    androidRuntimeClasspath(libs.compose.uiToolingPreview)
 }
 val buildFlavor: String = project.findProperty("buildFlavor")?.toString() ?: "dev"
 

@@ -9,8 +9,8 @@ import com.pbogdev.core.dispatcherProvider.DispatcherProvider
 import com.pbogdev.core.utils.safeResult
 import com.pbogdev.domain.models.CustomError
 import com.pbogdev.domain.models.CustomResult
-import com.pbogdev.domain.textEmbedder.TextEmbedderDelegate
-import com.pbogdev.domain.textEmbedder.VibeTextEmbedder
+import com.pbogdev.domain.matchmaking.TextEmbedderDelegate
+import com.pbogdev.domain.matchmaking.VibeTextEmbedder
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex

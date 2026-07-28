@@ -5,13 +5,17 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
 }
-
+dependencies {
+    androidRuntimeClasspath(libs.compose.uiTooling)
+    androidRuntimeClasspath(libs.compose.uiToolingPreview)
+}
 kotlin {
 
     // Target declarations - add or remove as needed below. These define
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
+        androidResources.enable = true
         namespace = "com.pbogdev.homescreen"
         minSdk = libs.versions.android.minSdk.get().toInt()
         compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -24,6 +28,7 @@ kotlin {
         }.configure {
             instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
+
     }
 
     // For iOS targets, this is also where you should
@@ -63,12 +68,14 @@ kotlin {
                 implementation(libs.compose.ui)
                 implementation(libs.compose.components.resources)
                 implementation(libs.compose.uiToolingPreview)
+                implementation(libs.compose.navigationevent)
                 implementation(libs.androidx.lifecycle.viewmodelCompose)
                 implementation(libs.bundles.koin)
                 implementation(libs.kermitLogger)
                 implementation(project(":domain"))
                 implementation(project(":core"))
                 implementation(project(":aimatchmakingengine"))
+                implementation(project(":sharedUI"))
                 // Add KMP dependencies here
             }
         }
@@ -105,5 +112,4 @@ kotlin {
             }
         }
     }
-
 }

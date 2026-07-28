@@ -1,6 +1,7 @@
 package com.pbogdev.aimatchmakingengine
 
-import com.pbogdev.domain.models.MatchmakingResult
+import com.pbogdev.domain.matchmaking.VibeMatchmaker
+import com.pbogdev.domain.matchmaking.MatchmakingResult
 import com.pbogdev.domain.models.Beacon
 import kotlin.math.sqrt
 

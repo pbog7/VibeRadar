@@ -1,6 +1,6 @@
 package com.pbogdev.aimatchmakingengine
 
-import com.pbogdev.domain.textEmbedder.VibeTextEmbedder
+import com.pbogdev.domain.matchmaking.VibeTextEmbedder
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 

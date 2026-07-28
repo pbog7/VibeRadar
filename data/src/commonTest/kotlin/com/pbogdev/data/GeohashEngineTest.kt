@@ -16,13 +16,13 @@ class GeohashEngineTest {
     private val geoHash = "srrny"
 
     @Test
-    fun `test standard encoding - Skopje, Karpos coordinates`() {
+    fun test_standard_encoding_Skopje_Karpos_coordinates() {
         val hash = engine.encode(latitude = latitude, longitude = longitude, precision = precision)
         assertEquals(precision, hash.length)
         assertEquals(expected = geoHash, actual = hash, message = "Standard encoding failed to provide correct geohash")
     }
     @Test
-    fun `test variable precision encoding`() {
+    fun test_variable_precision_encoding() {
         // High precision test (9 characters) to ensure the bitwise loop scales perfectly
         val hashHigh = engine.encode(42.0, 21.4, 9)
         assertEquals(9, hashHigh.length)
@@ -31,54 +31,54 @@ class GeohashEngineTest {
     // --- MID-GRID ADJACENCY TESTS ---
 
     @Test
-    fun `test mid grid adjacency - top`() {
+    fun test_mid_grid_adjacency_top() {
         assertEquals("sx8e", engine.getAdjacent("sx8d", TOP), "Top mid-grid neighbor failed to calculate standard Z-order shift")
     }
 
     @Test
-    fun `test mid grid adjacency - bottom`() {
+    fun test_mid_grid_adjacency_bottom() {
         assertEquals("sx89", engine.getAdjacent("sx8d", BOTTOM), "Bottom mid-grid neighbor failed to calculate standard Z-order shift")
     }
 
     @Test
-    fun `test mid grid adjacency - left`() {
+    fun test_mid_grid_adjacency_left() {
         assertEquals("sx86", engine.getAdjacent("sx8d", LEFT), "Left mid-grid neighbor failed to calculate standard Z-order shift")
     }
 
     @Test
-    fun `test mid grid adjacency - right`() {
+    fun test_mid_grid_adjacency_right() {
         assertEquals("sx8f", engine.getAdjacent("sx8d", RIGHT), "Right mid-grid neighbor failed to calculate standard Z-order shift")
     }
 
     // --- RECURSIVE BOUNDARY TESTS ---
 
     @Test
-    fun `test boundary crossing - right wall`() {
+    fun test_boundary_crossing_right_wall() {
         // 'f' is right edge. Parent "sx8" -> "sx9". Child 'f' wraps left to '4'.
         assertEquals("sx94", engine.getAdjacent("sx8f", RIGHT), "Right wall recursive boundary shift failed")
     }
 
     @Test
-    fun `test boundary crossing - left wall (Double Recursion)`() {
+    fun `test_boundary_crossing_left_wall_Double Recursion`() {
         // '4' is left edge. Parent '8' is ALSO left edge.
         // "sx" -> "sw", '8' wraps to 'x', '4' wraps to 'f'.
         assertEquals("srxf", engine.getAdjacent("sx84", LEFT), "Left wall double-recursive boundary shift failed")
     }
 
     @Test
-    fun `test boundary crossing - top wall`() {
+    fun `test_boundary crossing_top wall`() {
         // 'z' is top edge. Parent "sx8" -> "sxb". Child 'z' wraps bottom to 'b'.
         assertEquals("sxbb", engine.getAdjacent("sx8z", TOP), "Top wall recursive boundary shift failed")
     }
 
     @Test
-    fun `test boundary crossing - bottom wall`() {
+    fun `test_boundary_crossing_bottom wall`() {
         // '0' is bottom edge. Parent "sx8" -> "sx2". Child '0' wraps top to 'p'.
         assertEquals("sx2p", engine.getAdjacent("sx80", BOTTOM), "Bottom wall recursive boundary shift failed")
     }
 
     @Test
-    fun `test exact encoding - origin snaps to north east`() {
+    fun test_exact_encoding_origin_snaps_to_north_east() {
         // 0.0, 0.0 mathematically snaps to the North/East quadrant (s0000)
         val centerHash = engine.encode(0.0, 0.0, 5)
         assertEquals(
@@ -89,7 +89,7 @@ class GeohashEngineTest {
     }
 
     @Test
-    fun `test hemisphere wrap - crossing the Prime Meridian`() {
+    fun test_hemisphere_wrap_crossing_the_Prime_Meridian() {
         // Hardcode the known origin center to isolate the getAdjacent logic
         val centerHash = "s0000"
 
@@ -99,7 +99,7 @@ class GeohashEngineTest {
     }
 
     @Test
-    fun `test hemisphere wrap - crossing the Equator`() {
+    fun test_hemisphere_wrap_crossing_the_Equator() {
         // Hardcode the known origin center to isolate the getAdjacent logic
         val centerHash = "s0000"
 
@@ -109,7 +109,7 @@ class GeohashEngineTest {
     }
 
     @Test
-    fun `test nine box generation rules`() {
+    fun test_nine_box_generation_rules() {
         // Generate the 9-box grid for a generic point
         val grid = engine.getNineBoxGrid(geoHash)
 

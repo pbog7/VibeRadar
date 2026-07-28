@@ -1,7 +1,7 @@
 package com.pbogdev.aimatchmakingengine
 
 import com.pbogdev.domain.models.CustomResult
-import com.pbogdev.domain.textEmbedder.VibeTextEmbedder
+import com.pbogdev.domain.matchmaking.VibeTextEmbedder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
