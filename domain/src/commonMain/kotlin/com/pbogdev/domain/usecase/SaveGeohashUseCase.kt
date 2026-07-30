@@ -1,6 +1,6 @@
 package com.pbogdev.domain.usecase
 
-import com.pbogdev.domain.GeohashManager
+import com.pbogdev.domain.location.GeohashManager
 import com.pbogdev.domain.models.CustomResult
 import com.pbogdev.domain.usecase.base.BaseUseCase
 

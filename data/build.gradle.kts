@@ -105,6 +105,7 @@ kotlin {
                 implementation(libs.android.firebase.auth)
                 implementation(libs.kotlin.coroutines)
                 implementation(libs.kotlinx.coroutines.play.services)
+                implementation("com.google.android.gms:play-services-location:21.2.0")
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.

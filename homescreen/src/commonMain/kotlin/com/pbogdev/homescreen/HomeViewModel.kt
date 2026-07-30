@@ -1,6 +1,7 @@
 package com.pbogdev.homescreen
 
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pbogdev.core.appLogger
@@ -10,7 +11,7 @@ import com.pbogdev.domain.models.Beacon
 import com.pbogdev.domain.models.CustomError
 import com.pbogdev.domain.models.CustomResult
 import com.pbogdev.domain.models.Profile
-import com.pbogdev.domain.usecase.GetExamplesUseCase
+import com.pbogdev.domain.usecase.GetCurrentLocationUseCase
 import com.pbogdev.domain.usecase.GetNearbyBeaconsUseCase
 import com.pbogdev.domain.usecase.GetTextEmbeddingUseCase
 import com.pbogdev.domain.usecase.GetUserBeaconUseCase
@@ -23,20 +24,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.time.Clock
 import kotlin.time.Clock.System
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 class HomeViewModel(
-    private val getExamplesUseCase: GetExamplesUseCase,
     private val getNearbyBeaconsUseCase: GetNearbyBeaconsUseCase,
     private val saveGeohashUseCase: SaveGeohashUseCase,
     private val uploadBeaconUseCase: UploadBeaconUseCase,
     private val getTextEmbeddingUseCase: GetTextEmbeddingUseCase,
     private val getUserBeaconUseCase: GetUserBeaconUseCase,
-    private val setUserBeaconUseCase: SetUserBeaconUseCase
+    private val setUserBeaconUseCase: SetUserBeaconUseCase,
+    private val getCurrentLocationUseCase: GetCurrentLocationUseCase
 ) : ViewModel() {
 
     val vibeState = TextFieldState()
@@ -49,8 +47,38 @@ class HomeViewModel(
         _viewState.update { it.copy(radarState = radarState) }
     }
 
+    suspend fun updateLocation(): CustomResult<Unit> {
+        return when (val getCurrentLocationResult = getCurrentLocationUseCase()) {
+            is CustomResult.Success -> {
+                when (val saveGeohashResult = saveGeohashUseCase(
+                    SaveGeohashUseCase.Params(
+                        latitude = getCurrentLocationResult.data.latitude,
+                        longitude = getCurrentLocationResult.data.longitude
+                    )
+                )) {
+                    is CustomResult.Failure -> {
+                        saveGeohashResult
+                    }
+
+                    is CustomResult.Success -> {
+                        appLogger.i { "SaveGeohash finished ${getCurrentLocationResult.data} $saveGeohashResult" }
+                        CustomResult.Success(Unit)
+                    }
+
+                }
+            }
+
+            is CustomResult.Failure -> {
+                appLogger.i { "GetCurrentLocation failed ${getCurrentLocationResult.error}" }
+                getCurrentLocationResult
+            }
+
+        }
+    }
+
     suspend fun findMatch(): CustomResult<Unit> {
         _viewState.update { it.copy(radarState = RadarState.SEARCHING) }
+        updateLocation()
 //        if (viewState.value.uploadNewBeacon) {
 //            val uploadResult = uploadBeacon()
 //            if (uploadResult is CustomResult.Failure) {
@@ -127,6 +155,8 @@ class HomeViewModel(
 
     fun deleteBeacon() {
         // temporary until delete functionality is added
+        vibeState.clearText()
+
         _viewState.update { it.copy(myBeacon = null, uploadNewBeacon = true) }
     }
 
@@ -137,9 +167,10 @@ class HomeViewModel(
             }
         }
     }
+
     private fun setDummyMatchmakingBeacons() {
-         val dummyVector = FloatArray(512) { 0.1f }
-         val futureTime = System.now().toEpochMilliseconds()+ 86400000L // +1 day
+        val dummyVector = FloatArray(512) { 0.1f }
+        val futureTime = System.now().toEpochMilliseconds() + 86400000L // +1 day
         viewModelScope.launch {
             delay(5.seconds)
             _viewState.update {
@@ -246,7 +277,12 @@ class HomeViewModel(
                                     dislikesVector = dummyVector
                                 )
                             ),
-                            matchResult = MatchmakingResult(0.15f, 0.90f, 0.20f, 0.18f) // Very low match
+                            matchResult = MatchmakingResult(
+                                0.15f,
+                                0.90f,
+                                0.20f,
+                                0.18f
+                            ) // Very low match
                         ),
 
                         // 7. Minimalist (Very short texts to ensure the UI card doesn't stretch awkwardly)
@@ -282,7 +318,12 @@ class HomeViewModel(
                                     dislikesVector = dummyVector
                                 )
                             ),
-                            matchResult = MatchmakingResult(0.85f, 0.95f, 0.80f, 0.45f) // Dislikes tanked the overall
+                            matchResult = MatchmakingResult(
+                                0.85f,
+                                0.95f,
+                                0.80f,
+                                0.45f
+                            ) // Dislikes tanked the overall
                         ),
 
                         // 9. No profile, long vibe
@@ -366,7 +407,12 @@ class HomeViewModel(
                                     dislikesVector = dummyVector
                                 )
                             ),
-                            matchResult = MatchmakingResult(0.20f, 0.30f, 0.99f, 0.72f) // Vibe carried the score
+                            matchResult = MatchmakingResult(
+                                0.20f,
+                                0.30f,
+                                0.99f,
+                                0.72f
+                            ) // Vibe carried the score
                         ),
 
                         // 14. Huge comma-separated likes list
@@ -450,7 +496,12 @@ class HomeViewModel(
                                     dislikesVector = dummyVector
                                 )
                             ),
-                            matchResult = MatchmakingResult(0.1f, 0.0f, 0.70f, 0.65f) // DislikesMatchScore is 0.0 (no conflict), but algorithmically you'd likely adjust this based on your gamma weight
+                            matchResult = MatchmakingResult(
+                                0.1f,
+                                0.0f,
+                                0.70f,
+                                0.65f
+                            ) // DislikesMatchScore is 0.0 (no conflict), but algorithmically you'd likely adjust this based on your gamma weight
                         ),
 
                         // 19. Super short vibe, long dislikes
@@ -493,6 +544,7 @@ class HomeViewModel(
         }
 
     }
+
     init {
         viewModelScope.launch {
             when (val getUserBeaconResult = getUserBeaconUseCase()) {

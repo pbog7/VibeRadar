@@ -7,7 +7,7 @@ import com.pbogdev.data.local.VibeRadarPreferences.LAST_KNOWN_GEOHASH
 import com.pbogdev.data.local.VibeRadarPreferences.LAST_KNOWN_GEOHASH_GRID
 import com.pbogdev.data.location.GeohashEngine
 import com.pbogdev.core.utils.safeResult
-import com.pbogdev.domain.GeohashManager
+import com.pbogdev.domain.location.GeohashManager
 import com.pbogdev.domain.models.CustomError
 import com.pbogdev.domain.models.CustomResult
 import kotlinx.coroutines.flow.firstOrNull
