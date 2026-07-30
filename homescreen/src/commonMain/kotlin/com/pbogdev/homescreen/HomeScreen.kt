@@ -20,12 +20,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pbogdev.core.appLogger
+import com.pbogdev.domain.models.CustomResult
+import com.pbogdev.permissions.rememberLocationPermissionHandler
 import com.pbogdev.sharedui.Res
 import com.pbogdev.sharedui.settings_24px
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -36,7 +40,22 @@ fun HomeScreen(
     openSettings: () -> Unit
 ) {
     val state by viewModel.viewState.collectAsState()
+    val scope = rememberCoroutineScope()
     appLogger.i { "Home Screen composition" }
+    val locationPermission = rememberLocationPermissionHandler { isGranted ->
+        if (isGranted) {
+            scope.launch {
+                val findMatchResult = viewModel.findMatch()
+                if (findMatchResult is CustomResult.Failure) {
+                    appLogger.i { "FindMatch error ${findMatchResult.error.message}" }
+                    // show error
+                }
+            }
+        } else {
+            appLogger.i { "Permissions denied" }
+            // show error
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +75,7 @@ fun HomeScreen(
             modifier = Modifier.align(Alignment.TopCenter)
         ) {
             VibeInputForm(
-                onStartSearch = viewModel::findMatch,
+                onStartSearch = { locationPermission.requestPermission() },
                 vibeState = viewModel.vibeState,
                 likesState = viewModel.likesState,
                 dislikesState = viewModel.dislikesState,

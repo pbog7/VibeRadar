@@ -1,4 +1,4 @@
-package com.pbogdev.domain
+package com.pbogdev.domain.location
 
 import com.pbogdev.domain.models.CustomResult
 

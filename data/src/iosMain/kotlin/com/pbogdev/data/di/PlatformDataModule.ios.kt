@@ -4,8 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import com.pbogdev.data.local.PREFERENCES_DATASTORE_FILE_NAME
+import com.pbogdev.data.location.IOSLocationProvider
 import com.pbogdev.data.network.auth.IOSAnonymousAuthenticator
 import com.pbogdev.domain.auth.AnonymousAuthenticator
+import com.pbogdev.domain.location.LocationProvider
 import kotlinx.cinterop.ExperimentalForeignApi
 import okio.Path.Companion.toPath
 import org.koin.core.module.Module
@@ -39,4 +41,5 @@ actual val platformDataModule: Module = module {
         )
     }
     singleOf(::IOSAnonymousAuthenticator) bind AnonymousAuthenticator::class
+    singleOf(::IOSLocationProvider) bind LocationProvider::class
 }

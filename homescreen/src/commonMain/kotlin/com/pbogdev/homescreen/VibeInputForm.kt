@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun VibeInputForm(
-    onStartSearch: suspend () -> CustomResult<Unit>,
+    onStartSearch: () -> Unit,
     vibeState: TextFieldState,
     likesState: TextFieldState,
     dislikesState: TextFieldState,

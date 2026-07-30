@@ -19,7 +19,7 @@ inline fun <T> safeResult(
         throw e
     } catch (e: Exception) {
         // If the mapper provides a specific error, use it. Otherwise, use UnknownError.
-        val error = mapException(e) ?: CustomError.UnknownError(e.message ?: "Unknown Error")
+        val error = mapException(e) ?: CustomError.UnknownError(e.message ?: "Something went wrong")
         CustomResult.Failure(error)
     }
 }

@@ -1,6 +1,7 @@
 package com.pbogdev.viberadar.di
 
 import com.pbogdev.domain.usecase.AnonymousSignInUseCase
+import com.pbogdev.domain.usecase.GetCurrentLocationUseCase
 import com.pbogdev.domain.usecase.GetExamplesUseCase
 import com.pbogdev.domain.usecase.GetNearbyBeaconsUseCase
 import com.pbogdev.domain.usecase.GetTextEmbeddingUseCase
@@ -20,4 +21,5 @@ val domainModule = module {
     factoryOf(::AnonymousSignInUseCase)
     factoryOf(::GetUserBeaconUseCase)
     factoryOf(::SetUserBeaconUseCase)
+    factoryOf(::GetCurrentLocationUseCase)
 }

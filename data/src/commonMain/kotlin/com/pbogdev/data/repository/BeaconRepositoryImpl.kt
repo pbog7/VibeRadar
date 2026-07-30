@@ -16,7 +16,7 @@ import com.pbogdev.data.toBeaconDto
 import com.pbogdev.data.utils.appJson
 import com.pbogdev.data.utils.safeDecodeFromString
 import com.pbogdev.data.utils.safeEncodeToString
-import com.pbogdev.domain.GeohashManager
+import com.pbogdev.domain.location.GeohashManager
 import com.pbogdev.domain.auth.AnonymousAuthenticator
 import com.pbogdev.domain.matchmaking.MatchmakingBeacon
 import com.pbogdev.domain.matchmaking.VibeMatchmaker

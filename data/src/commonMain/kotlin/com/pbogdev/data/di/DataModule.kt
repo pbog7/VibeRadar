@@ -14,7 +14,7 @@ import com.pbogdev.data.repository.BeaconRepositoryImpl
 import com.pbogdev.data.repository.ExampleRepositoryImpl
 import com.pbogdev.data.utils.appJson
 import com.pbogdev.domain.LocalBeaconManager
-import com.pbogdev.domain.GeohashManager
+import com.pbogdev.domain.location.GeohashManager
 import com.pbogdev.domain.auth.AnonymousAuthenticator
 import com.pbogdev.domain.models.CustomResult
 import com.pbogdev.domain.repository.BeaconRepository
