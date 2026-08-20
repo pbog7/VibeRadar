@@ -79,29 +79,30 @@ class HomeViewModel(
     suspend fun findMatch(): CustomResult<Unit> {
         _viewState.update { it.copy(radarState = RadarState.SEARCHING) }
         updateLocation()
-//        if (viewState.value.uploadNewBeacon) {
-//            val uploadResult = uploadBeacon()
-//            if (uploadResult is CustomResult.Failure) {
-//                return uploadResult
-//            }
-//        }
-//        val nearbyResult = getNearbyBeacons()
-//        if (nearbyResult is CustomResult.Failure) {
-//            return nearbyResult
-//        }
-        setDummyMatchmakingBeacons()
+        if (viewState.value.uploadNewBeacon) {
+            val uploadResult = uploadBeacon()
+            if (uploadResult is CustomResult.Failure) {
+                return uploadResult
+            }
+        }
+        val nearbyResult = getNearbyBeacons()
+        if (nearbyResult is CustomResult.Failure) {
+            return nearbyResult
+        }
+//        setDummyMatchmakingBeacons()
         return CustomResult.Success(Unit)
     }
 
     private suspend fun uploadBeacon(): CustomResult<Unit> {
-        val vibe = viewState.value.vibe.text.toString()
+        val vibe = vibeState.text.toString()
         val textEmbeddingResult =
             getTextEmbeddingUseCase(GetTextEmbeddingUseCase.Params(text = vibe))
         when (textEmbeddingResult) {
             is CustomResult.Success -> {
+                updateProfile()
                 val beacon = Beacon(
                     vibeVector = textEmbeddingResult.data,
-                    expiresAt = viewState.value.expiresAt!!,
+                    expiresAt = System.now().toEpochMilliseconds() + 86400000L,
                     profile = viewState.value.profile,
                     vibe = vibe
                 )
@@ -543,6 +544,59 @@ class HomeViewModel(
             }
         }
 
+    }
+
+    private suspend fun updateProfile() {
+        val currentProfile = viewState.value.profile
+        val newLikes = likesState.text.toString().trim()
+        val newDislikes = dislikesState.text.toString().trim()
+
+        if (newLikes == (currentProfile?.likes ?: "") &&
+            newDislikes == (currentProfile?.dislikes ?: "")
+        ) {
+            return
+        }
+
+        if (newLikes.isEmpty()) {
+            if (currentProfile != null) {
+                _viewState.update { it.copy(profile = null) }
+            }
+            return
+        }
+
+        val likesVec: FloatArray = if (newLikes != currentProfile?.likes) {
+            val result = getTextEmbeddingUseCase(GetTextEmbeddingUseCase.Params(newLikes))
+            if (result is CustomResult.Success) {
+                result.data
+            } else {
+                return
+            }
+        } else {
+            currentProfile.likesVector
+        }
+
+        // 4. OPTIONAL DISLIKES EMBEDDING (Nullable)
+        val dislikesVec: FloatArray? = when {
+            newDislikes.isEmpty() -> null
+            newDislikes != currentProfile?.dislikes ->
+                (getTextEmbeddingUseCase(GetTextEmbeddingUseCase.Params(newDislikes)) as? CustomResult.Success)?.data
+
+            else -> currentProfile.dislikesVector
+        }
+
+        val updatedProfile = currentProfile?.copy(
+            likes = newLikes,
+            likesVector = likesVec,
+            dislikes = newDislikes,
+            dislikesVector = dislikesVec
+        ) ?: Profile(
+            likes = newLikes,
+            likesVector = likesVec,
+            dislikes = newDislikes,
+            dislikesVector = dislikesVec
+        )
+
+        _viewState.update { it.copy(profile = updatedProfile) }
     }
 
     init {

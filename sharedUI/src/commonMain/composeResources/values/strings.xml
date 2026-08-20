@@ -1,0 +1,23 @@
+<resources>
+    <string name="network_error_title">Connection Dropped</string>
+    <string name="network_error_message">The network timed out. Please check your internet connection and try again</string>
+    <string name="blank_vibe_error_title">Vibe not entered</string>
+    <string name="blank_vibe_error_message">Your vibe text cannot be blank. Enter a valid vibe before broadcasting to the grid.</string>
+    <string name="empty_beacon_list_error_title">Grid Quiet</string>
+    <string name="empty_beacon_list_error_message">No active beacons found in your local geohash. We will notify you when a potential match appears</string>
+    <string name="encryption_error_title">Encryption Failed</string>
+    <string name="encryption_error_message">Encryption failed, please try again</string>
+    <string name="decryption_error_title">Decryption Failed</string>
+    <string name="decryption_error_message">Encryption failed, please try again</string>
+    <string name="text_embedding_error_title">AI Engine Error</string>
+    <string name="text_embedding_error_message">The on-device semantic engine failed to process the vectors. Please try again</string>
+    <string name="authentication_error_title">Authentication Error</string>
+    <string name="authentication_error_message">Your anonymous session could not be verified by the network.</string>
+    <string name="geohash_error_title">Geohash Error</string>
+    <string name="geohash_error_message">Please make sure location is turned on and retry</string>
+    <string name="unknown_error_title">Something went wrong</string>
+    <string name="unknown_error_message">An unknown error has occurred, please try your request again.</string>
+    <string name="retry">Retry</string>
+    <string name="location_permissions_error_title">Permission Denied</string>
+    <string name="location_permissions_error_message">Location required to reach the local grid. We use fuzzed Geohashes—never exact coordinates.</string>
+</resources>

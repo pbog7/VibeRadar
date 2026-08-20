@@ -17,3 +17,5 @@ val TextGray = Color(0xFFA0A0A0)        // Secondary text (e.g., Timestamps, Sub
 
 // The Alerts (Errors / Disconnects)
 val AlertRed = Color(0xFFD9385E)       // High-contrast tech red for errors or blocking actions
+val AlertAmber = Color(0xFFFFB74D) // Warning (GPS Fuzzed)
+val InfoBlue = Color(0xFF40C4FF)   // Info (System Maintenance)
