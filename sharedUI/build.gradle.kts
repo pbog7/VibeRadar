@@ -5,10 +5,15 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
 }
+dependencies {
+    androidRuntimeClasspath(libs.compose.uiTooling)
+    androidRuntimeClasspath(libs.compose.uiToolingPreview)
+}
 compose.resources {
     publicResClass = true
     packageOfResClass = "com.pbogdev.sharedui"
 }
+
 kotlin {
 
     // Target declarations - add or remove as needed below. These define
@@ -71,7 +76,9 @@ kotlin {
                 implementation(libs.compose.foundation)
                 implementation(libs.compose.material3)
                 implementation(libs.compose.ui)
+                implementation(libs.bundles.koin)
                 implementation(libs.compose.components.resources)
+                implementation(libs.compose.uiToolingPreview)
                 // Add KMP dependencies here
             }
         }

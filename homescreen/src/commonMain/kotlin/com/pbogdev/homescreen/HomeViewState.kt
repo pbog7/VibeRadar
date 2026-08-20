@@ -8,7 +8,6 @@ import com.pbogdev.domain.models.Profile
 
 
 data class HomeViewState(
-    val vibe: TextFieldState = TextFieldState(),
     val nearbyBeacons: List<MatchmakingBeacon>? = null,
     val profile: Profile? = null,
     val myBeacon: Beacon? = null,

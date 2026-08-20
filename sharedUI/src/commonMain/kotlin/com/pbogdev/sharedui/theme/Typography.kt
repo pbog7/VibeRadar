@@ -47,6 +47,15 @@ fun getVibeTypography(): Typography {
             lineHeight = 36.sp
         ),
 
+        // Feedback sheet title
+        titleLarge = TextStyle(
+            fontFamily = interFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            lineHeight = 28.sp,
+            letterSpacing = 0.5.sp
+        ),
+
         // Collapsed Match Items, Settings Headers
         titleMedium = TextStyle(
             fontFamily = interFontFamily,

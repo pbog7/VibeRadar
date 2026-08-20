@@ -28,6 +28,7 @@ import com.pbogdev.domain.models.CustomResult
 import com.pbogdev.domain.usecase.AnonymousSignInUseCase
 import com.pbogdev.homescreen.HomeScreen
 import com.pbogdev.settingscreen.SettingsCoordinator
+import com.pbogdev.sharedui.components.systemActionLauncher.SystemActionLauncher
 import com.pbogdev.sharedui.theme.VibeRadarTheme
 import org.koin.compose.koinInject
 
@@ -39,6 +40,8 @@ fun App() {
         var isAuthenticating by remember { mutableStateOf(true) }
         var authFailed by remember { mutableStateOf(false) }
         var isSettingsOpen by rememberSaveable { mutableStateOf(false) }
+        val systemActionLauncher = koinInject<SystemActionLauncher>()
+
         NavigationBackHandler(
             state = rememberNavigationEventState(NavigationEventInfo.None),
             isBackEnabled = true, // You can toggle this dynamically
@@ -78,7 +81,7 @@ fun App() {
                 }
             } else {
                 // Once authenticated, show the main screen
-                HomeScreen(openSettings = { isSettingsOpen = true })
+                HomeScreen(openSettings = { isSettingsOpen = true }, openSystemSettings = systemActionLauncher::openAppSettings)
                 AnimatedVisibility(
                     visible = isSettingsOpen,
                     enter = slideInVertically { it } + fadeIn(),
