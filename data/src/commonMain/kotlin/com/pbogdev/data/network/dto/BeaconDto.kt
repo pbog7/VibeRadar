@@ -14,7 +14,9 @@ data class BeaconDto(
     @SerialName("vibe")
     val vibe: String,
     @SerialName("expiresAtEpochMillis")
-    val expiresAtEpochMillis: Long
+    val expiresAtEpochMillis: Long,
+    @SerialName("senderUid")
+    val senderUid: String
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

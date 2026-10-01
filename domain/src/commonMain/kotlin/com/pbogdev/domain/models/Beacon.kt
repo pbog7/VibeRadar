@@ -14,7 +14,8 @@ data class Beacon(
     val profile: Profile? = null,
     val vibeVector: FloatArray,
     val vibe: String,
-    val expiresAt: Long
+    val expiresAt: Long,
+    val senderUid: String? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

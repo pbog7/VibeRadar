@@ -20,4 +20,8 @@
     <string name="retry">Retry</string>
     <string name="location_permissions_error_title">Permission Denied</string>
     <string name="location_permissions_error_message">Location required to reach the local grid. We use fuzzed Geohashes—never exact coordinates.</string>
+    <string name="active_connection">1 Active connection</string>
+    <string name="active_connections_plural">%1$d Active connections</string>
+    <string name="unread_message">1 Unread message</string>
+    <string name="unread_messages_plural">Unread messages</string>
 </resources>

@@ -3,7 +3,10 @@ package com.pbogdev.data.di
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.room3.Room
+import androidx.room3.RoomDatabase
 import com.pbogdev.data.local.PREFERENCES_DATASTORE_FILE_NAME
+import com.pbogdev.data.local.database.VibeDatabase
 import com.pbogdev.data.location.IOSLocationProvider
 import com.pbogdev.data.network.auth.IOSAnonymousAuthenticator
 import com.pbogdev.domain.auth.AnonymousAuthenticator
@@ -39,6 +42,17 @@ actual val platformDataModule: Module = module {
                 path.toPath()
             }
         )
+    }
+    single<RoomDatabase.Builder<VibeDatabase>> {
+        val documentDir = NSFileManager.defaultManager.URLForDirectory(
+            directory = NSDocumentDirectory,
+            inDomain = NSUserDomainMask,
+            appropriateForURL = null,
+            create = false,
+            error = null
+        )
+        val dbPath = requireNotNull(documentDir?.path) + "/viberadar.db"
+        Room.databaseBuilder<VibeDatabase>(name = dbPath)
     }
     singleOf(::IOSAnonymousAuthenticator) bind AnonymousAuthenticator::class
     singleOf(::IOSLocationProvider) bind LocationProvider::class

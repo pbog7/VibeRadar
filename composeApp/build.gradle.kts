@@ -99,6 +99,7 @@ kotlin {
             implementation(project(":aimatchmakingengine"))
             implementation(project(":sharedUI"))
             implementation(project(":settingscreen"))
+            implementation(project(":ephemeralmessaging"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

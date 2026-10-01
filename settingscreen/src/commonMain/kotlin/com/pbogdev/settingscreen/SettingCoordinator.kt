@@ -8,7 +8,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 
 @Composable
-fun SettingsCoordinator(
+fun SettingsScreen(
     onCloseSettings: () -> Unit // This closes the whole modal back to the radar
 ) {
     // Start on the Main Menu
@@ -20,27 +20,28 @@ fun SettingsCoordinator(
     Crossfade(targetState = currentDestination, label = "SettingsNav") { screen ->
         when (screen) {
             is SettingsDestination.Menu -> {
-                SettingsMenuScreen(
-                    onNavigateToPrivacy = { currentDestination = SettingsDestination.PrivacyPolicy },
+                SettingsMenuLayout(
+                    onNavigateToPrivacy = {
+                        currentDestination = SettingsDestination.PrivacyPolicy
+                    },
                     onNavigateToTerms = { currentDestination = SettingsDestination.TermsOfService },
-                    onNavigateToData = { currentDestination = SettingsDestination.DataConfiguration },
                     onClose = onCloseSettings // Exits completely
                 )
             }
+
             is SettingsDestination.PrivacyPolicy -> {
-//                PrivacyPolicyScreen(
-//                    onBack = { currentDestination = SettingsDestination.Menu } // Goes back to menu
-//                )
+                PrivacyPolicyScreen(
+                    onNavigateBack = {
+                        currentDestination = SettingsDestination.Menu
+                    }
+                )
             }
+
             is SettingsDestination.TermsOfService -> {
-//                TermsScreen(
-//                    onBack = { currentDestination = SettingsDestination.Menu }
-//                )
-            }
-            is SettingsDestination.DataConfiguration -> {
-//                DataConfigScreen(
-//                    onBack = { currentDestination = SettingsDestination.Menu }
-//                )
+                TermsOfServiceScreen(
+                    onNavigateBack = { currentDestination = SettingsDestination.Menu },
+                    onAccept = {}
+                )
             }
         }
     }

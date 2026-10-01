@@ -4,6 +4,7 @@ import com.pbogdev.core.dispatcherProvider.DispatcherProvider
 import com.pbogdev.core.utils.safeResult
 import com.pbogdev.domain.models.CustomError
 import com.pbogdev.domain.models.CustomResult
+import com.pbogdev.domain.models.MessagePayloadType
 import com.pbogdev.viberadar.data.BuildKonfig
 import dev.whyoleg.cryptography.BinarySize.Companion.bits
 import dev.whyoleg.cryptography.CryptographyProvider
@@ -21,7 +22,7 @@ class CryptographyEngineImpl(
 ) : CryptographyEngine {
 
     @OptIn(ExperimentalEncodingApi::class)
-    override suspend fun encrypt(
+    override suspend fun encryptBeacon(
         payloadAsString: String,
         geohash: String,
         expiresAtEpochMillis: Long
@@ -45,7 +46,7 @@ class CryptographyEngineImpl(
 
 
     @OptIn(ExperimentalEncodingApi::class)
-    override suspend fun decrypt(
+    override suspend fun decryptBeacon(
         encryptedBase64: String,
         geohash: String,
         expiresAtEpochMillis: Long
@@ -66,7 +67,57 @@ class CryptographyEngineImpl(
             }
         }
 
-    private suspend fun deriveAesGcmCipher(geohash: String, expiresAtEpochMillis: Long): Cipher {
+    override suspend fun encryptMessage(
+        payloadAsString: String,
+        senderBeaconId: String,
+        expiresAtEpochMillis: Long,
+        messagePayloadType: MessagePayloadType
+    ): CustomResult<String> = safeResult(
+        mapException = { e ->
+            CustomError.EncryptionError(
+                e.message ?: "Encryption error"
+            )
+        }
+    ) {
+        withContext(dispatcherProvider.default) {
+            val key =  messagePayloadType.name + senderBeaconId
+            val cipher = deriveAesGcmCipher(key, expiresAtEpochMillis)
+
+            val encryptedBytes = cipher.encrypt(payloadAsString.encodeToByteArray())
+
+            CustomResult.Success(Base64.UrlSafe.encode(encryptedBytes))
+        }
+
+    }
+
+    override suspend fun decryptMessage(
+        encryptedBase64: String,
+        senderBeaconId: String,
+        expiresAtEpochMillis: Long,
+        messagePayloadType: MessagePayloadType
+    ): CustomResult<String> =
+        safeResult(
+            mapException = { e ->
+                CustomError.DecryptionError(
+                    e.message ?: "Data tamper detected or incorrect routing metadata", e.cause
+                )
+            }
+        ) {
+            withContext(dispatcherProvider.default) {
+                val key = messagePayloadType.name + senderBeaconId
+                val cipher = deriveAesGcmCipher(key, expiresAtEpochMillis)
+
+                val decryptedBytes = cipher.decrypt(Base64.UrlSafe.decode(encryptedBase64))
+
+                CustomResult.Success(decryptedBytes.decodeToString())
+            }
+        }
+
+    /**
+     * @param key the geohash string is used as a key for beacon encryption and the targetBeaconId is used for message encryption.
+     * @param expiresAtEpochMillis the expiration date in epoch millis is used for both beacon and message encryption
+     */
+    private suspend fun deriveAesGcmCipher(key: String, expiresAtEpochMillis: Long): Cipher {
         // 1. Initialize the required algorithms
         val hkdf = provider.get(HKDF)
         val aesGcm = provider.get(AES.GCM)
@@ -76,7 +127,7 @@ class CryptographyEngineImpl(
             digest = SHA256,
             outputSize = 256.bits, // 256 bits required for our AES-GCM cipher
             salt = null, // The interface accepts ByteArray?, null perfectly defaults to the RFC standard empty salt
-            info = "$geohash:$expiresAtEpochMillis".encodeToByteArray()
+            info = "$key:$expiresAtEpochMillis".encodeToByteArray()
         )
 
         // 3. Execute the derivation using our Master Secret (IKM)
