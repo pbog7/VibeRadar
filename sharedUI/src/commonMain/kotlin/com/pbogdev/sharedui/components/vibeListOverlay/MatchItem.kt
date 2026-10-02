@@ -1,7 +1,6 @@
-package com.pbogdev.homescreen
+package com.pbogdev.sharedui.components.vibeListOverlay
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,13 +24,20 @@ import androidx.compose.ui.unit.dp
 import com.pbogdev.domain.matchmaking.MatchmakingBeacon
 import com.pbogdev.domain.matchmaking.MatchmakingResult
 import com.pbogdev.domain.models.Beacon
+import com.pbogdev.domain.models.ConnectionStatus
 import com.pbogdev.domain.models.Profile
+import com.pbogdev.sharedui.theme.AlertAmber
 import com.pbogdev.sharedui.theme.VibeRadarTheme
 import kotlin.time.Clock.System
 
 @Composable
-fun MatchItem(match: MatchmakingBeacon, onConnect:()-> Unit) {
+fun MatchItem(match: MatchmakingBeacon, connectionStatus: ConnectionStatus? = null, onAction: (target: MatchmakingBeacon) -> Unit, actionButtonText: String) {
     var isExpanded by rememberSaveable(match.beacon.beaconId) { mutableStateOf(false) }
+    val borderColor = when (connectionStatus) {
+        ConnectionStatus.UNREAD -> MaterialTheme.colorScheme.primary
+        ConnectionStatus.IDLE -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -39,7 +45,7 @@ fun MatchItem(match: MatchmakingBeacon, onConnect:()-> Unit) {
             .clickable { isExpanded = !isExpanded }
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), // Subtle neon border
+                color = borderColor, // Subtle neon border
                 shape = RoundedCornerShape(16.dp)
             ),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
@@ -58,7 +64,7 @@ fun MatchItem(match: MatchmakingBeacon, onConnect:()-> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${match.matchResult.overallMatchScore*100}% Match",
+                    text = "${(match.matchResult.overallMatchScore * 100).toInt()}% Match",
                     color = Color.White,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -102,14 +108,18 @@ fun MatchItem(match: MatchmakingBeacon, onConnect:()-> Unit) {
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
-                    onClick = onConnect,
+                    onClick = { onAction(match) },
                     modifier = Modifier.align(Alignment.End),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                     ),
                 ) {
-                    Text(text = "CONNECT", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurface)
+                    Text(
+                        text = actionButtonText.uppercase(),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         }
@@ -125,7 +135,7 @@ fun PreviewMatchItem() {
             beaconId = "beacon-1",
             vibeVector = dummyVector,
             vibe = "Looking for someone to grab artisan coffee and debate Clean Architecture patterns.",
-            expiresAt = System.now().toEpochMilliseconds()+ 86400000L, // time now +1 day
+            expiresAt = System.now().toEpochMilliseconds() + 86400000L, // time now +1 day
             profile = Profile(
                 id = "prof-1",
                 likes = "Kotlin, Coffee, Dark Mode, Mechanical Keyboards",
@@ -137,8 +147,8 @@ fun PreviewMatchItem() {
         matchResult = MatchmakingResult(0.95f, 0.05f, 0.98f, 0.96f)
     )
     VibeRadarTheme {
-        Box(Modifier.fillMaxSize()){
-            MatchItem(match = dummyMatchmakingBeacon, onConnect = {})
+        Box(Modifier.fillMaxSize()) {
+            MatchItem(match = dummyMatchmakingBeacon, onAction = {}, actionButtonText = "connect")
         }
     }
 }

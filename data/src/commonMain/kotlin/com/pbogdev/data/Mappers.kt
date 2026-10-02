@@ -1,11 +1,20 @@
 package com.pbogdev.data
 
+import com.pbogdev.data.local.database.entities.ActiveConnectionEntity
 import com.pbogdev.data.network.dto.BeaconDto
 import com.pbogdev.data.network.dto.ExampleDto
+import com.pbogdev.data.network.dto.MatchmakingBeaconDTO
+import com.pbogdev.data.network.dto.MatchmakingResultDTO
 import com.pbogdev.data.network.dto.ProfileDto
+import com.pbogdev.data.utils.appJson
+import com.pbogdev.domain.matchmaking.MatchmakingBeacon
+import com.pbogdev.domain.matchmaking.MatchmakingResult
+import com.pbogdev.domain.models.ActiveConnection
 import com.pbogdev.domain.models.Beacon
+import com.pbogdev.domain.models.ConnectionStatus
 import com.pbogdev.domain.models.ExampleModel
 import com.pbogdev.domain.models.Profile
+import io.ktor.util.valuesOf
 
 
 fun ExampleDto.toExampleModel() = ExampleModel(
@@ -19,6 +28,7 @@ fun ProfileDto.toProfile() = Profile(
     likesVector = likesVector,
     dislikesVector = dislikesVector
 )
+
 fun Profile.toProfileDto() = ProfileDto(
     id = id,
     likes = likes,
@@ -32,16 +42,52 @@ fun BeaconDto.toBeacon() = Beacon(
     profile = profile?.toProfile(),
     vibeVector = vibeVector,
     expiresAt = expiresAtEpochMillis,
-    vibe = vibe
+    vibe = vibe,
+    senderUid = senderUid
 )
 
 
-
-fun Beacon.toBeaconDto() = BeaconDto(
+fun Beacon.toBeaconDto(senderId: String) = BeaconDto(
     beaconId = beaconId,
     profile = profile?.toProfileDto(),
     vibeVector = vibeVector,
     expiresAtEpochMillis = expiresAt,
-    vibe = vibe
+    vibe = vibe,
+    senderUid = senderId
 )
+
+fun MatchmakingBeacon.toMatchmakingBeaconDTO(senderId: String) = MatchmakingBeaconDTO(
+    beacon = beacon.toBeaconDto(senderId),
+    matchResult = matchResult.toMatchmakingResultDTO()
+)
+
+fun MatchmakingBeaconDTO.toMatchmakingBeacon() = MatchmakingBeacon(
+    beacon = beacon.toBeacon(),
+    matchResult = matchResult.toMatchmakingResult()
+)
+
+fun MatchmakingResult.toMatchmakingResultDTO() = MatchmakingResultDTO(
+    overallMatchScore = overallMatchScore,
+    likesMatchScore = likesMatchScore,
+    vibeMatchScore = vibeMatchScore,
+    dislikesMatchScore = dislikesMatchScore
+)
+
+fun MatchmakingResultDTO.toMatchmakingResult() = MatchmakingResult(
+    overallMatchScore = overallMatchScore,
+    likesMatchScore = likesMatchScore,
+    vibeMatchScore = vibeMatchScore,
+    dislikesMatchScore = dislikesMatchScore
+)
+
+fun ActiveConnectionEntity.toActiveConnection() = ActiveConnection(
+    target = appJson.decodeFromString<MatchmakingBeaconDTO>(matchmakingBeaconDtoString)
+        .toMatchmakingBeacon(),
+    status = ConnectionStatus.valueOf(connectionStatus),
+    encryptedUnreadMessage = encryptedMessagePayload
+)
+
+
+
+
 

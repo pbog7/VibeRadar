@@ -30,6 +30,9 @@ cryptographyVersion = "0.5.0"
 preferencesDatastoreVersion = "1.2.1"
 okioVersion = "3.17.0"
 navigationEventVersion = "1.1.0"
+room = "3.0.2"
+sqlite = "2.7.0"
+ksp = "2.3.12"
 
 
 [libraries]
@@ -99,6 +102,13 @@ cryptography-random = { group = "dev.whyoleg.cryptography", name = "cryptography
 # --- Cryptography END ---
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "preferencesDatastoreVersion"}
 okio = { module = "com.squareup.okio:okio", version.ref = "okioVersion"}
+# --- ROOM DATABASE START ---
+androidx-room-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room" }
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+# --- ROOM DATABASE END ---
+
+
 
 
 
@@ -109,6 +119,8 @@ kotlinXSerialization = ["kotlinx-serialization-core", "kotlinx-serialization-jso
 cryptography = ["cryptography-core", "cryptography-provider-optimal", "cryptography-random"]
 
 [plugins]
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+androidx-room3 = { id = "androidx.room3", version.ref = "room" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatformVersion" }

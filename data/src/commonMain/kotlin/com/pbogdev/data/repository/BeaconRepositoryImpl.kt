@@ -8,6 +8,7 @@ import com.pbogdev.data.crypto.CryptographyEngine
 import com.pbogdev.data.firestore.documentFieldsModels.EncryptedBeaconFields
 import com.pbogdev.data.firestore.wrapperModels.StringValue
 import com.pbogdev.data.firestore.wrapperModels.TimestampValue
+import com.pbogdev.data.local.database.dao.ActiveConnectionsDao
 import com.pbogdev.data.network.ApiService
 import com.pbogdev.data.network.dto.BeaconDto
 import com.pbogdev.data.network.dto.EncryptedBeaconDTO
@@ -34,7 +35,8 @@ class BeaconRepositoryImpl(
     private val cryptoEngine: CryptographyEngine,
     private val dispatcherProvider: DispatcherProvider,
     private val authenticator: AnonymousAuthenticator,
-    private val vibeMatchmaker: VibeMatchmaker
+    private val vibeMatchmaker: VibeMatchmaker,
+    private val activeConnectionsDao: ActiveConnectionsDao
 ) : BeaconRepository {
 
 
@@ -76,7 +78,7 @@ class BeaconRepositoryImpl(
         }
 
     private suspend fun encryptedBeaconDtoToBeacon(dto: EncryptedBeaconDTO): Beacon? {
-        val decryptResult = cryptoEngine.decrypt(
+        val decryptResult = cryptoEngine.decryptBeacon(
             encryptedBase64 = dto.payloadBase64,
             geohash = dto.geohash,
             expiresAtEpochMillis = dto.expiresAtEpochMillis
@@ -104,10 +106,10 @@ class BeaconRepositoryImpl(
             val userId = authenticator.getCurrentUid()
                 ?: return CustomResult.Failure(CustomError.UserNotLoggedIn())
             val geohash = (geohashResult as CustomResult.Success).data
-            val encryptBeaconResult = cryptoEngine.encrypt(
+            val encryptBeaconResult = cryptoEngine.encryptBeacon(
                 payloadAsString = appJson.safeEncodeToString(
                     dispatcherProvider = dispatcherProvider,
-                    value = beacon.toBeaconDto()
+                    value = beacon.toBeaconDto(userId)
                 ),
                 geohash = geohash,
                 expiresAtEpochMillis = beacon.expiresAt
@@ -119,17 +121,24 @@ class BeaconRepositoryImpl(
 
                 is CustomResult.Success -> {
                     apiService.uploadBeacon(
-                        EncryptedBeaconFields(
+                        fields = EncryptedBeaconFields(
                             geohash = StringValue(geohash),
                             expiresAt = TimestampValue(epochMillisToIso(beacon.expiresAt)),
                             payload = StringValue(encryptBeaconResult.data),
                             expiresAtEpochMillis = StringValue(beacon.expiresAt.toString()),
                             senderUid = StringValue(userId)
-                        )
+                        ),
+                        beaconId = beacon.beaconId
                     )
                 }
             }
             CustomResult.Success(Unit)
         }
+    }
+
+    override suspend fun deleteMyBeacon(beaconId: String): CustomResult<Unit> = safeResult {
+        activeConnectionsDao.deleteAllActiveConnections()
+        apiService.deleteBeacon(beaconId)
+        CustomResult.Success(Unit)
     }
 }

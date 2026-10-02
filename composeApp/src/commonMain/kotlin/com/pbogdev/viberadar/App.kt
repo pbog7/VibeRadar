@@ -21,13 +21,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.zIndex
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
+import com.pbogdev.domain.models.ActiveConnection
+import com.pbogdev.domain.models.ConnectionStatus
 import com.pbogdev.domain.models.CustomResult
 import com.pbogdev.domain.usecase.AnonymousSignInUseCase
+import com.pbogdev.ephemeralmessaging.messagingScreen.EphemeralMessagingScreen
 import com.pbogdev.homescreen.HomeScreen
-import com.pbogdev.settingscreen.SettingsCoordinator
+import com.pbogdev.settingscreen.SettingsScreen
 import com.pbogdev.sharedui.components.systemActionLauncher.SystemActionLauncher
 import com.pbogdev.sharedui.theme.VibeRadarTheme
 import org.koin.compose.koinInject
@@ -41,12 +45,15 @@ fun App() {
         var authFailed by remember { mutableStateOf(false) }
         var isSettingsOpen by rememberSaveable { mutableStateOf(false) }
         val systemActionLauncher = koinInject<SystemActionLauncher>()
+        var focusedSession by remember { mutableStateOf<ActiveConnection?>(null) }
 
         NavigationBackHandler(
             state = rememberNavigationEventState(NavigationEventInfo.None),
             isBackEnabled = true, // You can toggle this dynamically
             onBackCompleted = {
-                if(isSettingsOpen){
+                if (focusedSession != null) {
+                    focusedSession = null // Minimizes Chat to Hub
+                } else if (isSettingsOpen) {
                     isSettingsOpen = false
                 }
                 //back pressed logic here
@@ -81,17 +88,48 @@ fun App() {
                 }
             } else {
                 // Once authenticated, show the main screen
-                HomeScreen(openSettings = { isSettingsOpen = true }, openSystemSettings = systemActionLauncher::openAppSettings)
+                HomeScreen(
+                    openSettings = { isSettingsOpen = true },
+                    openSystemSettings = systemActionLauncher::openAppSettings,
+                    onActiveConnectionSelected = { activeConnection ->
+                        focusedSession = activeConnection
+                    },
+                    onConnect = { target ->
+                        // Add to the map and instantly focus it
+                        focusedSession = ActiveConnection(
+                            target = target,
+                            status = ConnectionStatus.IDLE,
+                            encryptedUnreadMessage = null
+                        )
+                    }
+                )
                 AnimatedVisibility(
                     visible = isSettingsOpen,
                     enter = slideInVertically { it } + fadeIn(),
                     exit = slideOutVertically { it } + fadeOut(),
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    // We load the Coordinator, which handles its own internal routing!
-                    SettingsCoordinator(
+                    SettingsScreen(
                         onCloseSettings = { isSettingsOpen = false }
                     )
+                }
+
+                AnimatedVisibility(
+                    visible = focusedSession != null,
+                    enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+                    exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
+                    modifier = Modifier.fillMaxSize().zIndex(20f)
+                ) {
+                    // Instantiates the ViewModel and injects data on mount[cite: 4]
+                    focusedSession?.let {
+                        EphemeralMessagingScreen(
+                            targetMatchmakingBeacon = it.target,
+                            encryptedEphemeralMessage = it.encryptedUnreadMessage,
+                            onAbortSession = {
+                                focusedSession = null
+                            }
+                        )
+                    }
                 }
             }
         }

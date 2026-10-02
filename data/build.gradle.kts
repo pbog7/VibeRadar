@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.buildKonfig)
     alias(libs.plugins.kotlinSerializationPlugin)
     alias(libs.plugins.kotlinCocoapods)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room3)
 }
 
 kotlin {
@@ -85,6 +87,8 @@ kotlin {
                 implementation(libs.bundles.cryptography)
                 implementation(libs.datastore)
                 implementation(libs.okio)
+                implementation(libs.androidx.room.runtime)
+                implementation(libs.androidx.sqlite.bundled)
                 // Add KMP dependencies here
             }
         }
@@ -132,7 +136,14 @@ kotlin {
         }
     }
 }
-
+dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
+}
+room3 {
+    schemaDirectory("$projectDir/schemas")
+}
 val secretsFile = rootProject.file("secrets.properties")
 val secretsProperties = Properties()
 

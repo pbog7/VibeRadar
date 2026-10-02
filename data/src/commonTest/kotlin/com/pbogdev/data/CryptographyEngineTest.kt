@@ -24,12 +24,12 @@ class CryptographyEngineTest {
     @Test
     fun `encrypt and decrypt with exact matching metadata returns original payload`() = runTest {
         // Act - Encrypt
-        val encryptResult = cryptoEngine.encrypt(defaultJson, defaultGeohash, defaultTimeWindow)
+        val encryptResult = cryptoEngine.encryptBeacon(defaultJson, defaultGeohash, defaultTimeWindow)
         assertTrue(encryptResult is CustomResult.Success, "Encryption should succeed")
         val encryptedBase64 = encryptResult.data
 
         // Act - Decrypt
-        val decryptResult = cryptoEngine.decrypt(encryptedBase64, defaultGeohash, defaultTimeWindow)
+        val decryptResult = cryptoEngine.decryptBeacon(encryptedBase64, defaultGeohash, defaultTimeWindow)
         assertTrue(
             decryptResult is CustomResult.Success,
             "Decryption should succeed with correct metadata"
@@ -42,7 +42,7 @@ class CryptographyEngineTest {
     @Test
     fun `decrypt fails when attempting to read with a different geohash`() = runTest {
         // Arrange
-        val encryptedBase64 = (cryptoEngine.encrypt(
+        val encryptedBase64 = (cryptoEngine.encryptBeacon(
             defaultJson,
             defaultGeohash,
             defaultTimeWindow
@@ -51,7 +51,7 @@ class CryptographyEngineTest {
         // Act - Someone in Berlin tries to decrypt the Skopje vibe
         val maliciousGeohash = "u33dc"
         val decryptResult =
-            cryptoEngine.decrypt(encryptedBase64, maliciousGeohash, defaultTimeWindow)
+            cryptoEngine.decryptBeacon(encryptedBase64, maliciousGeohash, defaultTimeWindow)
 
         // Assert
         assertTrue(
@@ -63,7 +63,7 @@ class CryptographyEngineTest {
     @Test
     fun `decrypt fails when attempting to read with a different time window`() = runTest {
         // Arrange
-        val encryptedBase64 = (cryptoEngine.encrypt(
+        val encryptedBase64 = (cryptoEngine.encryptBeacon(
             defaultJson,
             defaultGeohash,
             defaultTimeWindow
@@ -71,7 +71,7 @@ class CryptographyEngineTest {
 
         // Act - App tries to derive the key using tomorrow's date
         val wrongTimeWindow = 2710080000
-        val decryptResult = cryptoEngine.decrypt(encryptedBase64, defaultGeohash, wrongTimeWindow)
+        val decryptResult = cryptoEngine.decryptBeacon(encryptedBase64, defaultGeohash, wrongTimeWindow)
 
         // Assert
         assertTrue(
@@ -83,7 +83,7 @@ class CryptographyEngineTest {
     @Test
     fun `decrypt fails when the ciphertext payload is tampered with`() = runTest {
         // Arrange
-        val encryptedBase64 = (cryptoEngine.encrypt(
+        val encryptedBase64 = (cryptoEngine.encryptBeacon(
             defaultJson,
             defaultGeohash,
             defaultTimeWindow
@@ -91,7 +91,7 @@ class CryptographyEngineTest {
 
         // Act - Simulate network tampering or MITM attack
         val tamperedBase64 = encryptedBase64.replaceFirst('A', 'B')
-        val decryptResult = cryptoEngine.decrypt(tamperedBase64, defaultGeohash, defaultTimeWindow)
+        val decryptResult = cryptoEngine.decryptBeacon(tamperedBase64, defaultGeohash, defaultTimeWindow)
 
         // Assert
         assertTrue(

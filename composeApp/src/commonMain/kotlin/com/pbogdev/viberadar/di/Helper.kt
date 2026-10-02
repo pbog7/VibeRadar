@@ -3,6 +3,7 @@ package com.pbogdev.viberadar.di
 import com.pbogdev.aimatchmakingengine.aiMatchmakingModule
 import com.pbogdev.core.di.coreModule
 import com.pbogdev.data.di.dataModule
+import com.pbogdev.ephemeralmessaging.di.ephemeralMessagingModule
 import com.pbogdev.homescreen.di.homeScreenModule
 import com.pbogdev.sharedui.di.sharedUIModule
 import org.koin.core.context.startKoin
@@ -16,7 +17,8 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
         homeScreenModule,
         aiMatchmakingModule,
         coreModule,
-        sharedUIModule
+        sharedUIModule,
+        ephemeralMessagingModule
         // add other modules here
     )
 }

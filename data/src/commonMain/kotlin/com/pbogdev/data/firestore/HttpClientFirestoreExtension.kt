@@ -64,10 +64,11 @@ suspend inline fun <reified T> HttpClient.queryFirestore(
 suspend inline fun <reified T> HttpClient.createFirestoreDocument(
     projectId: String,
     collection: String,
-    documentFields: T
+    documentFields: T,
+    documentId: String
 ) {
     val url =
-        "https://firestore.googleapis.com/v1/projects/$projectId/databases/(default)/documents/$collection"
+        "https://firestore.googleapis.com/v1/projects/$projectId/databases/(default)/documents/$collection?documentId=$documentId"
 
     val requestWrapper = FirestoreDocumentDto(
         name = null,
@@ -78,6 +79,22 @@ suspend inline fun <reified T> HttpClient.createFirestoreDocument(
         contentType(ContentType.Application.Json)
         setBody(requestWrapper)
     }
+
+    if (!response.status.isSuccess()) {
+        val responseText = response.bodyAsText()
+        throw IllegalStateException("Firestore network error: ${response.status} - $responseText")
+    }
+}
+
+suspend fun HttpClient.deleteFirestoreDocument(
+    projectId: String,
+    collection: String,
+    documentId: String
+) {
+    // Target the exact document using the collection and documentId
+    val url = "https://firestore.googleapis.com/v1/projects/$projectId/databases/(default)/documents/$collection/$documentId"
+
+    val response = this.delete(url)
 
     if (!response.status.isSuccess()) {
         val responseText = response.bodyAsText()

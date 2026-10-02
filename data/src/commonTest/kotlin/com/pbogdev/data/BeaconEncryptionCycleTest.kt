@@ -45,7 +45,7 @@ class BeaconEncryptionCycleTest {
     @Test
     fun `domain model maps to DTO and back without data loss`() {
         // Act
-        val dto = originalDomainBeacon.toBeaconDto()
+        val dto = originalDomainBeacon.toBeaconDto("A")
         val reconstructedDomain = dto.toBeacon()
 
         // Assert
@@ -62,7 +62,7 @@ class BeaconEncryptionCycleTest {
     @Test
     fun `DTO serializes to JSON and parses back correctly`() {
         // Arrange
-        val originalDto = originalDomainBeacon.toBeaconDto()
+        val originalDto = originalDomainBeacon.toBeaconDto("A")
 
         // Act
         val jsonString = Json.encodeToString(originalDto)
@@ -87,13 +87,13 @@ class BeaconEncryptionCycleTest {
     @Test
     fun `full pipeline survives mapping serialization and encryption`() = runTest {
         // Act - OUTBOUND
-        val dtoOut = originalDomainBeacon.toBeaconDto()
+        val dtoOut = originalDomainBeacon.toBeaconDto("A")
         val jsonString = Json.encodeToString(dtoOut)
         val encryptedBase64 =
-            (cryptoEngine.encrypt(jsonString, geohash, timeWindow) as CustomResult.Success).data
+            (cryptoEngine.encryptBeacon(jsonString, geohash, timeWindow) as CustomResult.Success).data
 
         // Act - INBOUND
-        val decryptedJsonString = (cryptoEngine.decrypt(
+        val decryptedJsonString = (cryptoEngine.decryptBeacon(
             encryptedBase64,
             geohash,
             timeWindow

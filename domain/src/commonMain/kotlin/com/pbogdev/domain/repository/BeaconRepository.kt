@@ -8,4 +8,6 @@ interface BeaconRepository {
     suspend fun getNearbyBeacons(userBeacon: Beacon): CustomResult<List<MatchmakingBeacon>>
 
     suspend fun uploadBeacon(beacon: Beacon): CustomResult<Unit>
+
+    suspend fun deleteMyBeacon(beaconId: String): CustomResult<Unit>
 }

@@ -9,7 +9,6 @@ val SettingsDestinationSaver = Saver<SettingsDestination, String>(
             SettingsDestination.Menu -> "Menu"
             SettingsDestination.PrivacyPolicy -> "PrivacyPolicy"
             SettingsDestination.TermsOfService -> "TermsOfService"
-            SettingsDestination.DataConfiguration -> "DataConfiguration"
         }
     },
     restore = { savedString ->
@@ -17,7 +16,6 @@ val SettingsDestinationSaver = Saver<SettingsDestination, String>(
         when (savedString) {
             "PrivacyPolicy" -> SettingsDestination.PrivacyPolicy
             "TermsOfService" -> SettingsDestination.TermsOfService
-            "DataConfiguration" -> SettingsDestination.DataConfiguration
             else -> SettingsDestination.Menu
         }
     }

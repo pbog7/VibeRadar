@@ -1,4 +1,4 @@
-package com.pbogdev.homescreen
+package com.pbogdev.sharedui.components.vibeListOverlay
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -27,12 +27,17 @@ import androidx.compose.ui.unit.dp
 import com.pbogdev.domain.matchmaking.MatchmakingBeacon
 import com.pbogdev.domain.matchmaking.MatchmakingResult
 import com.pbogdev.domain.models.Beacon
+import com.pbogdev.domain.models.ConnectionStatus
 import com.pbogdev.sharedui.theme.VibeRadarTheme
 
 @Composable
-fun MatchResultsOverlay(
+fun VibeListOverlay(
     matches: List<MatchmakingBeacon>,
-    onClose: () -> Unit = {}
+    sessionStatuses: Map<String, ConnectionStatus>? = null,
+    title: String,
+    actionButtonText: String,
+    onClose: () -> Unit = {},
+    onConnect: (target: MatchmakingBeacon) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -58,7 +63,7 @@ fun MatchResultsOverlay(
     ) {
         // Sticky Header
         Text(
-            text = "${matches.size} Vibe Matches Found!",
+            text = title,
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.headlineMedium
         )
@@ -72,14 +77,19 @@ fun MatchResultsOverlay(
             // Prevents the overlay from covering the whole screen
         ) {
             items(matches) { match ->
-                MatchItem(match = match, onConnect = {})
+                MatchItem(
+                    match = match,
+                    onAction = onConnect,
+                    actionButtonText = actionButtonText,
+                    connectionStatus = sessionStatuses?.get(match.beacon.beaconId)
+                )
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
 
         // --- STICKY FOOTER BUTTON ---
         OutlinedButton(
-            onClick = { onClose() },
+            onClick = { onClose()  },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary
@@ -94,7 +104,7 @@ fun MatchResultsOverlay(
 
 @Preview
 @Composable
-fun PreviewMatchResultsOverlay() {
+fun PreviewVibeListOverlay() {
     VibeRadarTheme {
         Box(
             modifier = Modifier
@@ -103,7 +113,10 @@ fun PreviewMatchResultsOverlay() {
                 .padding(16.dp),
             contentAlignment = Alignment.BottomCenter // Pins it to the bottom like the real app
         ) {
-            MatchResultsOverlay(
+            VibeListOverlay(
+                title = "",
+                actionButtonText = "",
+                onConnect = {},
                 onClose = {}, matches = listOf(
                     MatchmakingBeacon(
                         beacon = Beacon(
