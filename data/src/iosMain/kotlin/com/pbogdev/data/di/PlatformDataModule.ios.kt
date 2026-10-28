@@ -1,0 +1,59 @@
+package com.pbogdev.data.di
+
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.room3.Room
+import androidx.room3.RoomDatabase
+import com.pbogdev.data.local.PREFERENCES_DATASTORE_FILE_NAME
+import com.pbogdev.data.local.database.VibeDatabase
+import com.pbogdev.data.location.IOSLocationProvider
+import com.pbogdev.data.network.auth.IOSAnonymousAuthenticator
+import com.pbogdev.domain.auth.AnonymousAuthenticator
+import com.pbogdev.domain.location.LocationProvider
+import kotlinx.cinterop.ExperimentalForeignApi
+import okio.Path.Companion.toPath
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import platform.Foundation.NSDocumentDirectory
+import platform.Foundation.NSFileManager
+import platform.Foundation.NSUserDomainMask
+
+@OptIn(ExperimentalForeignApi::class)
+actual val platformDataModule: Module = module {
+    single<DataStore<Preferences>> {
+        PreferenceDataStoreFactory.createWithPath(
+            produceFile = {
+                // 1. Ask Apple's Foundation API for the secure Documents folder
+                val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
+                    directory = NSDocumentDirectory,
+                    inDomain = NSUserDomainMask,
+                    appropriateForURL = null,
+                    create = false,
+                    error = null,
+                )
+
+                // 2. Append our exact filename to the path
+                val path = requireNotNull(documentDirectory).path + PREFERENCES_DATASTORE_FILE_NAME
+
+                // 3. Convert it to a Multiplatform Okio Path
+                path.toPath()
+            }
+        )
+    }
+    single<RoomDatabase.Builder<VibeDatabase>> {
+        val documentDir = NSFileManager.defaultManager.URLForDirectory(
+            directory = NSDocumentDirectory,
+            inDomain = NSUserDomainMask,
+            appropriateForURL = null,
+            create = false,
+            error = null
+        )
+        val dbPath = requireNotNull(documentDir?.path) + "/viberadar.db"
+        Room.databaseBuilder<VibeDatabase>(name = dbPath)
+    }
+    singleOf(::IOSAnonymousAuthenticator) bind AnonymousAuthenticator::class
+    singleOf(::IOSLocationProvider) bind LocationProvider::class
+}

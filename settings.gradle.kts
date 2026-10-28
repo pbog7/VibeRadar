@@ -29,3 +29,14 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":core")
+include(":domain")
+include(":data")
+include(":androidApp")
+include(":homescreen")
+include(":aimatchmakingengine")
+include(":testCore")
+include(":sharedUI")
+include(":settingscreen")
+include(":permissions")
+include(":ephemeralmessaging")

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "765609461807",
+    "project_id": "viberadar-d30fb",
+    "storage_bucket": "viberadar-d30fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765609461807:android:04cbfdb684b57bf6e09eda",
+        "android_client_info": {
+          "package_name": "com.pbogdev.viberadar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCJ72sstzIXrdBo1P0m-WqgILE4HjS2eg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

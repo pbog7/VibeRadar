@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyB-HmztKbrdOQ6-pfxJxXZmpDT1va2YiE0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>765609461807</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.pbogdev.viberadar</string>
+	<key>PROJECT_ID</key>
+	<string>viberadar-d30fb</string>
+	<key>STORAGE_BUCKET</key>
+	<string>viberadar-d30fb.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:765609461807:ios:0e26a6957eb19461e09eda</string>
+</dict>
+</plist>

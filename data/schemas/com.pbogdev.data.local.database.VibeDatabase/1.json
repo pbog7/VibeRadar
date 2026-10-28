@@ -1,0 +1,78 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "51c340a4fec53c0908d4c13e5e96a8a0",
+    "entities": [
+      {
+        "tableName": "active_connections",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`beaconId` TEXT NOT NULL, `senderUid` TEXT NOT NULL, `encryptedMessagePayload` TEXT, `matchmakingBeaconDtoString` TEXT NOT NULL, `connectionStatus` TEXT NOT NULL, PRIMARY KEY(`beaconId`))",
+        "fields": [
+          {
+            "fieldPath": "beaconId",
+            "columnName": "beaconId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "senderUid",
+            "columnName": "senderUid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedMessagePayload",
+            "columnName": "encryptedMessagePayload",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "matchmakingBeaconDtoString",
+            "columnName": "matchmakingBeaconDtoString",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "connectionStatus",
+            "columnName": "connectionStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "beaconId"
+          ]
+        }
+      },
+      {
+        "tableName": "beacons",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`beaconId` TEXT NOT NULL, `payload` TEXT NOT NULL, PRIMARY KEY(`beaconId`))",
+        "fields": [
+          {
+            "fieldPath": "beaconId",
+            "columnName": "beaconId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payload",
+            "columnName": "payload",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "beaconId"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '51c340a4fec53c0908d4c13e5e96a8a0')"
+    ]
+  }
+}
